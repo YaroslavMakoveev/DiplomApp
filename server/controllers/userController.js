@@ -48,6 +48,23 @@ class UserController {
                 role
             });
             const token = generadeJwt(user.id, user.email, user.role);
+
+            // Отправка email
+            let mailOptions = {
+                from: process.env.EMAIL_USER,
+                to: user.email,
+                subject: 'Успешная авторизация',
+                text: `Вы успешно зарегистрировались! Данные для входа (email:пароль): ${user.email}: ${password}`,
+            };
+
+            transporter.sendMail(mailOptions, (error, info) => {
+                if (error) {
+                    console.log('Ошибка отправки сообщения:', error);
+                } else {
+                    console.log('Сообщение отправлено:', info.response);
+                }
+            });
+            
             return res.status(200).json({ message: 'Пользователь успешно зарегистрирован!', user, token });
         } catch (e) {
             console.log(e);
@@ -74,23 +91,6 @@ class UserController {
                 return res.status(403).json({ message: 'Неверный пароль' });
             }
             const token = generadeJwt(user.id, user.email, user.role);
-
-            // Отправка email
-            let mailOptions = {
-                from: process.env.EMAIL_USER,
-                to: user.email,
-                subject: 'Успешная авторизация',
-                text: 'Вы успешно вошли в систему'
-            };
-
-            transporter.sendMail(mailOptions, (error, info) => {
-                if (error) {
-                    console.log('Ошибка отправки сообщения:', error);
-                } else {
-                    console.log('Сообщение отправлено:', info.response);
-                }
-            });
-
             return res.status(200).json({ message: 'Пользователь успешно авторизован', user, token });
         } catch (e) {
             console.log(e);

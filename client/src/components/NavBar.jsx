@@ -35,6 +35,12 @@ function NavBar() {
         checkAuth();
     }, []);
 
+    const handleLogout = () => {
+        localStorage.removeItem('token');
+        setIsAuthenticated(false);
+        setUser(null);
+    };
+
     return (
         <Navbar style={{ display: 'flex', alignItems: 'center' }} collapseOnSelect expand="lg" className="bg-body-tertiary">
             <Container>
@@ -72,6 +78,9 @@ function NavBar() {
                                 </Nav.Link>
                                 <Button style={{ height: '40px' }}>
                                     Админ
+                                </Button>
+                                <Button variant="danger" onClick={handleLogout} style={{ marginLeft: '10px', height: '40px' }}>
+                                    Выйти
                                 </Button>
                             </div>
                         ) : (
