@@ -226,6 +226,36 @@ class UserController {
                 return res.status(403).json({ message: 'Неверный пароль' });
             }
             const token = generadeJwt(user.id, user.email, user.role);
+
+             // Отправка email
+             const templatePath = path.join(__dirname, '../emailTemplates/login.html');
+ 
+             console.log('Template Path:', templatePath);
+ 
+             ejs.renderFile(templatePath, (err, html) => {
+                 if (err) {
+                     console.log('Ошибка рендеринга шаблона:', err);
+                     return res.status(500).json({ message: 'Ошибка сервера' });
+                 }
+ 
+                 console.log('Rendered HTML:', html);
+ 
+                 let mailOptions = {
+                     from: process.env.EMAIL_USER,
+                     to: user.email,
+                     subject: 'Вы вошли в систему',
+                     html: html
+                 };
+ 
+                 transporter.sendMail(mailOptions, (error, info) => {
+                     if (error) {
+                         console.log('Ошибка отправки сообщения:', error);
+                     } else {
+                         console.log('Сообщение отправлено:', info.response);
+                     }
+                 });
+             });
+
             return res.status(200).json({ message: 'Пользователь успешно авторизован', user, token });
         } catch (e) {
             console.log(e);
