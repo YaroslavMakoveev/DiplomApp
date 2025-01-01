@@ -47,6 +47,9 @@ const LoginScreen = () => {
       if (error.response && error.response.status === 404) {
         setErrors({ email: 'Неверный email или номер телефона' });
       }
+      if (error.response && error.response.status === 404) {
+        setErrors({ phone: 'Неверный email или номер телефона' });
+      }
       if (error.response && error.response.status === 403) {
         setErrors({ password: 'Неверный пароль' });
       }
