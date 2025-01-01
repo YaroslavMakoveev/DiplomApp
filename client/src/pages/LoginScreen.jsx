@@ -96,6 +96,9 @@ const LoginScreen = () => {
             <Button className="mt-3" style={{ width: '100%' }} variant="primary" type="submit">
               Войти
             </Button>
+            <Button className="mt-3" style={{ width: '100%' }} variant="link" onClick={() => navigate('/forgot-password')}>
+              Забыли пароль?
+            </Button>
           </Form>
         </Tab>
         <Tab eventKey="phone" title="Номер телефона">
@@ -130,6 +133,9 @@ const LoginScreen = () => {
             </Form.Group>
             <Button className="mt-3" style={{ width: '100%' }} variant="primary" type="submit">
               Войти
+            </Button>
+            <Button className="mt-3" style={{ width: '100%' }} variant="link" onClick={() => navigate('/forgot-password')}>
+              Забыли пароль?
             </Button>
           </Form>
         </Tab>
