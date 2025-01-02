@@ -154,7 +154,6 @@ class UserController {
     }
 
     // Восстановление пароля
-
     async forgotPassword(req, res) {
         const { email } = req.body;
         try {
@@ -224,6 +223,35 @@ class UserController {
             await user.save();
 
             return res.status(200).json({ message: 'Пароль успешно изменен' });
+        } catch (e) {
+            console.log(e);
+            return res.status(500).json({ message: 'Ошибка сервера' });
+        }
+    }
+
+    // Редактирование профиля пользователя
+
+    async updateProfile(req, res) {
+        const { name, surname, patronymic } = req.body;
+        const img = req.file ? req.file.filename : null;
+        const userId = req.user.id;
+    
+        try {
+            const user = await Users.findOne({ where: { id: userId } });
+            if (!user) {
+                return res.status(404).json({ message: 'Пользователь не найден' });
+            }
+    
+            user.name = name || user.name;
+            user.surname = surname || user.surname;
+            user.patronymic = patronymic || user.patronymic;
+            if (img) {
+                user.img = img;
+            }
+    
+            await user.save();
+    
+            return res.status(200).json({ message: 'Профиль успешно обновлен', user });
         } catch (e) {
             console.log(e);
             return res.status(500).json({ message: 'Ошибка сервера' });
