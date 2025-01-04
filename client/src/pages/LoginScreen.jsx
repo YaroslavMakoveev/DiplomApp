@@ -45,10 +45,10 @@ const LoginScreen = () => {
       window.location.reload(); // Обновляем страницу
     } catch (error) {
       if (error.response && error.response.status === 404) {
-        setErrors({ email: 'Неверный email или номер телефона' });
-      }
-      if (error.response && error.response.status === 404) {
-        setErrors({ phone: 'Неверный email или номер телефона' });
+        setErrors({ 
+          phone: 'Неверный номер телефона',
+          email: 'Неверный email'
+      });
       }
       if (error.response && error.response.status === 403) {
         setErrors({ password: 'Неверный пароль' });
