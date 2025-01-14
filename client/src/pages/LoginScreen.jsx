@@ -39,16 +39,16 @@ const LoginScreen = () => {
         phone: authMethod === 'phone' ? phone : '',
         password,
       });
-      localStorage.setItem('token', response.data.token); // Сохраняем токен в localStorage
-      localStorage.setItem('role', response.data.role); // Сохраняем роль в localStorage
-      navigate('/'); // Перенаправляем на главную страницу после успешного входа
-      window.location.reload(); // Обновляем страницу
+      localStorage.setItem('token', response.data.token);
+      localStorage.setItem('role', response.data.role);
+      navigate('/');
+      window.location.reload();
     } catch (error) {
       if (error.response && error.response.status === 404) {
-        setErrors({ email: 'Неверный email или номер телефона' });
-      }
-      if (error.response && error.response.status === 404) {
-        setErrors({ phone: 'Неверный email или номер телефона' });
+        setErrors({ 
+          email: 'Неверный email или номер телефона',
+          phone: 'Неверный email или номер телефона'
+        });
       }
       if (error.response && error.response.status === 403) {
         setErrors({ password: 'Неверный пароль' });
@@ -57,8 +57,8 @@ const LoginScreen = () => {
   };
 
   return (
-    <Container className="mt-3" style={{ width: '50%' }}>
-      <h2 style={{ color: 'black' }} className='text-center mt-4'>Авторизация</h2>
+    <Container className="mt-3" style={{ width: '50%', minHeight: '70vh' }}>
+      <h2 style={{ color: 'black', marginTop: '20%' }} className='text-center'>Авторизация</h2>
       <Tabs
         defaultActiveKey="email"
         id="auth-method-tabs"

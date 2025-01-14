@@ -110,7 +110,6 @@ class UserController {
                 return res.status(403).json({ message: 'Неверный пароль' });
             }
             const token = generadeJwt(user.id, user.email, user.role);
-
             // Отправка email
             const templatePath = path.join(__dirname, '../emailTemplates/login.html');
 
@@ -140,7 +139,7 @@ class UserController {
                 });
             });
 
-            return res.status(200).json({ message: 'Пользователь успешно авторизован', user, token });
+            return res.status(200).json({ message: 'Пользователь успешно авторизован', user, token, role: user.role});
         } catch (e) {
             console.log(e);
             return res.status(500).json({ message: 'Ошибка сервера' });

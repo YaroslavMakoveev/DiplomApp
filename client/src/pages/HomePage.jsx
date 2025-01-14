@@ -2,7 +2,7 @@ import React from 'react';
 
 const HomeScreen = () => {
     return (
-        <>Home</>
+        <div style={{minHeight: '90vh'}}></div>
     );
 };
 
