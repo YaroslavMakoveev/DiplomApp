@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
 import NavBar from './components/NavBar';
 import Footer from './components/Footer';
-import HomeScreen from './pages/HomePage';
+import HomeScreen from './pages/HomeScreen';
 import LoginScreen from './pages/LoginScreen';
 import ForgotPasswordScreen from './pages/ForgotPasswordScreen';
 import ResetPasswordScreen from './pages/ResetPasswordScreen';
