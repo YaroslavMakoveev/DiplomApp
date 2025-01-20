@@ -42,6 +42,12 @@ const HomeScreen = () => {
 
         if (!formData.age) {
             newErrors.age = 'Пожалуйста, введите возраст ребенка.';
+        } else if (formData.age < 4) {
+            setAlertMessage('Набор начинается с 4 лет.');
+            setAlertVariant('danger');
+            setShowAlert(true);
+            setTimeout(() => setShowAlert(false), 5000);
+            return false;
         }
 
         setErrors(newErrors);
@@ -54,10 +60,10 @@ const HomeScreen = () => {
             try {
                 const response = await axios.post('http://localhost:3000/api/trial', formData);
                 console.log('Success:', response.data);
-                setAlertMessage('Вы успешно записались на пробное занятие!');
+                setAlertMessage('Вы успешно записались на пробное занятие! В течение 24 часов вам придет ответ на указанный в заявке адрес электронной почты!');
                 setAlertVariant('success');
                 setShowAlert(true);
-                setTimeout(() => setShowAlert(false), 5000);
+                setTimeout(() => setShowAlert(false), 10000);
             } catch (error) {
                 console.error('Error:', error);
                 setAlertMessage(error.response?.data?.message || 'Произошла ошибка при записи на пробное занятие.');
@@ -71,11 +77,11 @@ const HomeScreen = () => {
     return (
         <div style={{ minHeight: '90vh' }}>
             <Container>
-                <Carousel className='mt-3'>
+                <Carousel className='mt-3' style={{ boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)', borderRadius: '25px' }}>
                     <Carousel.Item>
                         <img
                             className="d-block w-100"
-                            src="http://localhost:3000/img/slider1.jpg"
+                            src="http://localhost:3000/static/slider1.jpg"
                             alt="First slide"
                             style={{ height: '700px', objectFit: 'cover', borderRadius: '25px' }}
                         />
@@ -87,7 +93,7 @@ const HomeScreen = () => {
                     <Carousel.Item>
                         <img
                             className="d-block w-100"
-                            src="http://localhost:3000/img/slider.jpg"
+                            src="http://localhost:3000/static/slider.jpg"
                             alt="Second slide"
                             style={{ height: '700px', objectFit: 'cover', borderRadius: '25px' }}
                         />
@@ -98,7 +104,7 @@ const HomeScreen = () => {
                     <Carousel.Item>
                         <img
                             className="d-block w-100"
-                            src="http://localhost:3000/img/slider2.jpg"
+                            src="http://localhost:3000/static/slider2.jpg"
                             alt="Third slide"
                             style={{ height: '700px', objectFit: 'cover', borderRadius: '25px' }}
                         />
@@ -110,14 +116,56 @@ const HomeScreen = () => {
 
                 <Row className="my-4">
                     <Col>
+                        <h2 className='text-center mt-3'>О нашей школе</h2>
+                    </Col>
+                </Row>
+
+                <Row className="my-4 school_cards" style={{ boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)' }}>
+                    <Col md={6} className="d-flex justify-content-center align-items-center">
+                        <img
+                            src="http://localhost:3000/static/home1.jpg"
+                            alt="School"
+                            style={{ width: '100%', height: 'auto', borderRadius: '15px' }}
+                        />
+                    </Col>
+                    <Col md={6} className="d-flex justify-content-center align-items-center">
+                        <div style={{ textAlign: 'left', padding: '20px' }}>
+                            <h3>Наша миссия</h3>
+                            <p>
+                                Наша школа самбо стремится развивать физические и моральные качества детей, готовить их к жизни через спорт. <br /> Мы верим, что самбо помогает формировать характер, дисциплину и уважение к другим.
+                            </p>
+                        </div>
+                    </Col>
+                </Row>
+
+                <Row className="my-4 school_cards" style={{ boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)' }}>
+                    <Col md={6} className="d-flex justify-content-center align-items-center">
+                        <div style={{ textAlign: 'left', padding: '20px' }}>
+                            <h3>Наши достижения</h3>
+                            <p>
+                                За годы работы наша школа достигла значительных успехов. <br /> Наши ученики регулярно занимают призовые места на соревнованиях различного уровня, от местных турниров до международных чемпионатов.
+                            </p>
+                        </div>
+                    </Col>
+                    <Col md={6} className="d-flex justify-content-center align-items-center">
+                        <img
+                            src="http://localhost:3000/static/home2.jpg"
+                            alt="School"
+                            style={{ width: '100%', height: 'auto', borderRadius: '15px' }}
+                        />
+                    </Col>
+                </Row>
+
+                <Row className="my-4 mt-5">
+                    <Col>
                         <h2 className='text-center mt-3'>Наши преимущества</h2>
                     </Col>
                 </Row>
 
                 <Row className="my-4">
                     <Col md={3} className="d-flex justify-content-center">
-                        <Card style={{ height: '340px', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
-                            <Card.Img style={{ width: '50%', marginTop: '2vh' }} variant="top" src="http://localhost:3000/img/good1.png" />
+                        <Card style={{ boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)', height: '340px', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
+                            <Card.Img style={{ width: '50%', marginTop: '2vh' }} variant="top" src="http://localhost:3000/static/good1.png" />
                             <Card.Body style={{ textAlign: 'center' }}>
                                 <Card.Title>Квалифицированные учителя</Card.Title>
                                 <Card.Text>
@@ -127,8 +175,8 @@ const HomeScreen = () => {
                         </Card>
                     </Col>
                     <Col md={3} className="d-flex justify-content-center">
-                        <Card style={{ height: '340px', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
-                            <Card.Img style={{ width: '50%', marginTop: '2vh' }} variant="top" src="http://localhost:3000/img/good2.png" />
+                        <Card style={{ boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)', height: '340px', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
+                            <Card.Img style={{ width: '50%', marginTop: '2vh' }} variant="top" src="http://localhost:3000/static/good2.png" />
                             <Card.Body style={{ textAlign: 'center' }}>
                                 <Card.Title>Современные технологии</Card.Title>
                                 <Card.Text>
@@ -138,8 +186,8 @@ const HomeScreen = () => {
                         </Card>
                     </Col>
                     <Col md={3} className="d-flex justify-content-center">
-                        <Card style={{ height: '340px', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
-                            <Card.Img style={{ width: '50%', marginTop: '2vh' }} variant="top" src="http://localhost:3000/img/good3.png" />
+                        <Card style={{ boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)', height: '340px', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
+                            <Card.Img style={{ width: '50%', marginTop: '2vh' }} variant="top" src="http://localhost:3000/static/good3.png" />
                             <Card.Body style={{ textAlign: 'center' }}>
                                 <Card.Title>Индивидуальный подход</Card.Title>
                                 <Card.Text>
@@ -149,8 +197,8 @@ const HomeScreen = () => {
                         </Card>
                     </Col>
                     <Col md={3} className="d-flex justify-content-center">
-                        <Card style={{ height: '340px', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
-                            <Card.Img style={{ width: '50%', marginTop: '2vh' }} variant="top" src="http://localhost:3000/img/good4.png" />
+                        <Card style={{ boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)', height: '340px', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
+                            <Card.Img style={{ width: '50%', marginTop: '2vh' }} variant="top" src="http://localhost:3000/static/good4.png" />
                             <Card.Body style={{ textAlign: 'center' }}>
                                 <Card.Title>Разнообразные внеклассные мероприятия</Card.Title>
                                 <Card.Text>
@@ -162,7 +210,7 @@ const HomeScreen = () => {
                 </Row>
 
                 <Row className="my-4 d-flex justify-content-center mt-5">
-                    <Col md={6} style={{ backgroundColor: '#f8f9fa', borderRadius: '15px', padding: '30px', maxWidth: '500px', boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)' }}>
+                    <Col md={6} style={{ boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)', backgroundColor: '#f8f9fa', borderRadius: '15px', padding: '30px', maxWidth: '500px', boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)' }}>
                         <h2 className='text-center mb-4'>Запись на пробное занятие</h2>
                         {showAlert && (
                             <Alert variant={alertVariant} onClose={() => setShowAlert(false)} dismissible>
@@ -193,7 +241,7 @@ const HomeScreen = () => {
                             </Form.Group>
                             <Form.Group controlId="formAge" className="mb-3">
                                 <Form.Label>Возраст ребенка</Form.Label>
-                                <Form.Control type="text" placeholder="Введите возраст ребенка" name="age" value={formData.age} onChange={handleChange} style={{ borderRadius: '5px' }} isInvalid={!!errors.age} />
+                                <Form.Control type="number" placeholder="Введите возраст ребенка" name="age" value={formData.age} onChange={handleChange} style={{ borderRadius: '5px' }} isInvalid={!!errors.age} />
                                 <Form.Control.Feedback type="invalid">
                                     {errors.age}
                                 </Form.Control.Feedback>

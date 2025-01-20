@@ -27,7 +27,8 @@ const TrialLesson = sequelize.define('TrialLesson', {
     phone: { type: DataTypes.STRING, allowNull: false },
     email: { type: DataTypes.STRING, allowNull: false },
     age: { type: DataTypes.INTEGER, allowNull: false },
-    message: { type: DataTypes.TEXT, allowNull: true }
+    message: { type: DataTypes.TEXT, allowNull: true },
+    status: { type: DataTypes.STRING, allowNull: false, defaultValue: 'Рассматривается' }
 });
 
 module.exports = {

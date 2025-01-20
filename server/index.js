@@ -14,7 +14,7 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
-app.use('/img', express.static(path.join(__dirname, 'slider')));
+app.use('/static', express.static(path.join(__dirname, 'static')));
 app.use('/api', router)
 
 const start = async () => {

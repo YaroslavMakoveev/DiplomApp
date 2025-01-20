@@ -8,6 +8,8 @@ import LoginScreen from './pages/LoginScreen';
 import ForgotPasswordScreen from './pages/ForgotPasswordScreen';
 import ResetPasswordScreen from './pages/ResetPasswordScreen';
 import Profile from './pages/Profile';
+import AdminScreen from './pages/AdminScreen';
+import AdminCheck from './middleware/AdminCheck';
 
 
 function App() {
@@ -21,6 +23,11 @@ function App() {
           <Route path='/forgot-password' element={<ForgotPasswordScreen />} />
           <Route path='/reset-password/:token' element={<ResetPasswordScreen />} />
           <Route path='/profile' element={<Profile />} />
+          <Route path='/admin' element={
+            <AdminCheck>
+              <AdminScreen />
+            </AdminCheck>
+          } />
         </Routes>
       </Router>
       <Footer />

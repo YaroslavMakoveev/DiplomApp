@@ -80,7 +80,7 @@ function NavBar() {
                                     {user.surname} {user.name} {user.patronymic}
                                 </Nav.Link>
                                 <AdminCheck>
-                                    <Button style={{ height: '40px' }}>
+                                    <Button variant='warning' href='/admin' style={{ height: '40px' }}>
                                         Админ
                                     </Button>
                                 </AdminCheck>

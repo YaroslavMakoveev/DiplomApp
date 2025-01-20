@@ -116,15 +116,6 @@ function Profile() {
                     <Card>
                         <Card.Body>
                             <div style={{ }}>
-                                <h5 style={{textAlign: 'center'}}>Участие в турнирах</h5>
-                                {/* Тут будет список турниров */}
-                            </div>
-                        </Card.Body>
-                    </Card>
-
-                    <Card className='mt-3'>
-                        <Card.Body>
-                            <div style={{ }}>
                                 <h5 style={{textAlign: 'center'}}>Достижения</h5>
                                 {/* Тут будет список турниров */}
                             </div>
