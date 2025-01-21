@@ -110,7 +110,7 @@ class TrialLessonController {
                 return res.status(404).json({ message: 'Заявка не найдена' });
             }
 
-            trialLesson.message = `Отменено: ${cancelReason}`;
+            trialLesson.message = `${cancelReason}`;
             trialLesson.status = 'Отклонена';
             await trialLesson.save();
 

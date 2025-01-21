@@ -26,7 +26,7 @@ const HomeScreen = () => {
     const validate = () => {
         const newErrors = {};
         const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        const phonePattern = /^\+?[0-9]{10,15}$/;
+        const phonePattern = /^\+?[0-9]{11,12}$/;
 
         if (!formData.name) {
             newErrors.name = 'Пожалуйста, введите ваше ФИО.';

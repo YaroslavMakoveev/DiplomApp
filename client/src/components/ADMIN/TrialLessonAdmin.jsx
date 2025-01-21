@@ -61,7 +61,7 @@ const TrialLessonAdmin = () => {
     };
 
     return (
-        <Container style={{minHeight: '90vh'}}>
+        <Container style={{minHeight: '90vh', marginTop: '10px'}}>
             {trialLessons.length === 0 ? (
                 <Row>
                     <Col>
