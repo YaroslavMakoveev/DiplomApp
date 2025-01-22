@@ -15,7 +15,7 @@ module.exports = function (role) {
             if(decoded.role !== role) {
                 return res.status(403).json({message: 'Не достаточно прав'})
             }
-            req.user = decoded
+            req.user = decoded;
             next();
         } catch (e) {
             return res.status(500).json({message: 'Не авторизован'})

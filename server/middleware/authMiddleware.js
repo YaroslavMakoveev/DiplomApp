@@ -11,11 +11,7 @@ module.exports = function (req, res, next) {
             return res.status(401).json({message: 'Не авторизован'})
         }
         const decoded = jwt.verify(token, process.env.SECRET_KEY)
-        req.user = {
-            id: decoded.id,
-            email: decoded.email,
-            role: decoded.role
-        };
+        req.user = decoded;
         next();
     } catch (e) {
         return res.status(500).json({message: 'Не авторизован'})

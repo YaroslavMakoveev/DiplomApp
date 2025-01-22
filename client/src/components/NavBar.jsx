@@ -76,7 +76,7 @@ function NavBar() {
                         {isAuthenticated ? (
                             <div style={{ display: 'flex', alignItems: 'center' }}>
                                 <Nav.Link href='/profile' style={{ display: 'flex', alignItems: 'center', marginRight: '10px' }}>
-                                    <img src={`http://localhost:3000/uploads/${user.img}`} style={{ width: '40px', borderRadius: '50%', marginRight: '7px' }} alt="User" />
+                                    <img src={`http://localhost:3000/uploads/${user.img}`} style={{ width: '40px', height:'40px', objectFit: 'cover', borderRadius: '50%', marginRight: '7px' }} alt="User" />
                                     {user.surname} {user.name} {user.patronymic}
                                 </Nav.Link>
                                 <AdminCheck>

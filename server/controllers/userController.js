@@ -92,7 +92,7 @@ class UserController {
     }
 
     async login(req, res) {
-        const { email, phone, password } = req.body;
+        const { email, phone, password, role } = req.body;
         let user;
         try {
             if (email) {
@@ -149,7 +149,7 @@ class UserController {
     async check(req, res) {
         const token = generadeJwt(req.user.id, req.user.email, req.user.role);
         const user = await Users.findOne({ where: { id: req.user.id } });
-        return res.json({ token, user });
+        return res.json({ token, user, role: user.role });
     }
 
     // Восстановление пароля

@@ -102,7 +102,14 @@ function Profile() {
                                 <img
                                     src={`http://localhost:3000/uploads/${user.img}`}
                                     alt="User Avatar"
-                                    style={{ width: '200px', borderRadius: '50%', marginBottom: '20px' }}
+                                    style={{
+                                        width: '200px',
+                                        height: '200px',
+                                        borderRadius: '50%',
+                                        margin: '0 auto',
+                                        objectFit: 'cover',
+                                        marginBottom: '20px'
+                                    }}
                                 />
                                 <h3>{user.surname} {user.name} {user.patronymic}</h3>
                                 <Button variant="primary" onClick={handleEditProfile}>
@@ -168,7 +175,7 @@ function Profile() {
                                 onChange={handleFileChange}
                             />
                         </Form.Group>
-                        <Button variant="primary" type="submit">
+                        <Button className='mt-2' variant="primary" type="submit">
                             Сохранить
                         </Button>
                     </Form>
