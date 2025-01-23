@@ -200,7 +200,7 @@ const HomeScreen = () => {
                         <Card style={{ boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)', height: '340px', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
                             <Card.Img style={{ width: '50%', marginTop: '2vh' }} variant="top" src="http://localhost:3000/static/good4.png" />
                             <Card.Body style={{ textAlign: 'center' }}>
-                                <Card.Title>Разнообразные внеклассные мероприятия</Card.Title>
+                                <Card.Title>Разнообразные мероприятия</Card.Title>
                                 <Card.Text>
                                     Спортивные секции, кружки по интересам и культурные мероприятия.
                                 </Card.Text>

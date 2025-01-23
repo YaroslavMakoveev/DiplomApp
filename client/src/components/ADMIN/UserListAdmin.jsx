@@ -14,8 +14,11 @@ const UserList = () => {
         patronymic: '',
         email: '',
         phone: '',
-        role: ''
+        weightCategory: '',
+        discharge: '',
+        dateOfBirth: '',
     });
+    const [image, setImage] = useState(null);
     const [searchQuery, setSearchQuery] = useState('');
 
     useEffect(() => {
@@ -71,12 +74,25 @@ const UserList = () => {
         }
     };
 
+    const handleImageChange = (e) => {
+        setImage(e.target.files[0]);
+    };
+
     const updateUser = async () => {
         try {
             const token = localStorage.getItem('token');
-            await axios.put(`http://localhost:3000/api/admin/users/${selectedUser.id}`, editedUser, {
+            const data = new FormData();
+            for (const key in editedUser) {
+                data.append(key, editedUser[key]);
+            }
+            if (image) {
+                data.append('img', image);
+            }
+
+            await axios.put(`http://localhost:3000/api/admin/users/${selectedUser.id}`, data, {
                 headers: {
                     Authorization: `Bearer ${token}`,
+                    'Content-Type': 'multipart/form-data'
                 },
             });
             setShowEditModal(false);
@@ -110,12 +126,12 @@ const UserList = () => {
 
             <Modal show={showEditModal} onHide={() => setShowEditModal(false)}>
                 <Modal.Header closeButton>
-                    <Modal.Title>Edit User</Modal.Title>
+                    <Modal.Title>Редактирование пользователя</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
                     <Form>
                         <Form.Group>
-                            <Form.Label>Name</Form.Label>
+                            <Form.Label>Имя</Form.Label>
                             <Form.Control
                                 type="text"
                                 value={editedUser.name}
@@ -123,7 +139,7 @@ const UserList = () => {
                             />
                         </Form.Group>
                         <Form.Group>
-                            <Form.Label>Surname</Form.Label>
+                            <Form.Label>Фамилия</Form.Label>
                             <Form.Control
                                 type="text"
                                 value={editedUser.surname}
@@ -131,7 +147,7 @@ const UserList = () => {
                             />
                         </Form.Group>
                         <Form.Group>
-                            <Form.Label>Patronymic</Form.Label>
+                            <Form.Label>Отчество</Form.Label>
                             <Form.Control
                                 type="text"
                                 value={editedUser.patronymic}
@@ -139,7 +155,31 @@ const UserList = () => {
                             />
                         </Form.Group>
                         <Form.Group>
-                            <Form.Label>Email</Form.Label>
+                            <Form.Label>Весовая категория</Form.Label>
+                            <Form.Control
+                                type="text"
+                                value={editedUser.weightCategory}
+                                onChange={(e) => setEditedUser({ ...editedUser, weightCategory: e.target.value })}
+                            />
+                        </Form.Group>
+                        <Form.Group>
+                            <Form.Label>Разряд</Form.Label>
+                            <Form.Control
+                                type="text"
+                                value={editedUser.discharge}
+                                onChange={(e) => setEditedUser({ ...editedUser, discharge: e.target.value })}
+                            />
+                        </Form.Group>
+                        <Form.Group>
+                            <Form.Label>Дата рождения</Form.Label>
+                            <Form.Control
+                                type="text"
+                                value={editedUser.dateOfBirth}
+                                onChange={(e) => setEditedUser({ ...editedUser, dateOfBirth: e.target.value })}
+                            />
+                        </Form.Group>
+                        <Form.Group>
+                            <Form.Label>Адрес электронной почты</Form.Label>
                             <Form.Control
                                 type="email"
                                 value={editedUser.email}
@@ -147,18 +187,22 @@ const UserList = () => {
                             />
                         </Form.Group>
                         <Form.Group>
-                            <Form.Label>Phone</Form.Label>
+                            <Form.Label>Номер телефона</Form.Label>
                             <Form.Control
                                 type="text"
                                 value={editedUser.phone}
                                 onChange={(e) => setEditedUser({ ...editedUser, phone: e.target.value })}
                             />
                         </Form.Group>
+                        <Form.Group>
+                            <Form.Label>Изображение</Form.Label>
+                            <Form.Control type="file" onChange={handleImageChange} />
+                        </Form.Group>
                     </Form>
                 </Modal.Body>
                 <Modal.Footer>
-                    <Button variant="secondary" onClick={() => setShowEditModal(false)}>Cancel</Button>
-                    <Button variant="primary" onClick={updateUser}>Save Changes</Button>
+                    <Button variant="secondary" onClick={() => setShowEditModal(false)}>Отменить</Button>
+                    <Button variant="primary" onClick={updateUser}>Сохранить изменения</Button>
                 </Modal.Footer>
             </Modal>
         </Container>

@@ -168,7 +168,7 @@ function Profile() {
                             />
                         </Form.Group>
                         <Form.Group controlId="formImg">
-                            <Form.Label>Аватар</Form.Label>
+                            <Form.Label>Фото</Form.Label>
                             <Form.Control
                                 type="file"
                                 name="img"

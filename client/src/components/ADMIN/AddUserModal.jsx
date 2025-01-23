@@ -7,11 +7,15 @@ const AddUserModal = ({ show, handleClose, onUserAdded }) => {
         name: '',
         surname: '',
         patronymic: '',
+        weightCategory: '',
+        discharge: '',
+        dateOfBirth: '',
         email: '',
         phone: '',
         password: '',
         role: 'USER'
     });
+    const [image, setImage] = useState(null);
     const [errors, setErrors] = useState({});
     const [success, setSuccess] = useState(null);
 
@@ -22,13 +26,25 @@ const AddUserModal = ({ show, handleClose, onUserAdded }) => {
         });
     };
 
+    const handleImageChange = (e) => {
+        setImage(e.target.files[0]);
+    };
+
     const handleSubmit = async (e) => {
         e.preventDefault();
         setErrors({});
         setSuccess(null);
 
+        const data = new FormData();
+        for (const key in formData) {
+            data.append(key, formData[key]);
+        }
+        if (image) {
+            data.append('img', image);
+        }
+
         try {
-            const response = await axios.post('http://localhost:3000/api/user/registration', formData, {
+            const response = await axios.post('http://localhost:3000/api/user/registration', data, {
                 headers: {
                     'Content-Type': 'multipart/form-data'
                 }
@@ -73,6 +89,21 @@ const AddUserModal = ({ show, handleClose, onUserAdded }) => {
                         <Form.Control type="text" name="patronymic" value={formData.patronymic} onChange={handleChange} required />
                     </Form.Group>
 
+                    <Form.Group controlId="formWeightCategory">
+                        <Form.Label>Весовая категория</Form.Label>
+                        <Form.Control type="text" name="weightCategory" value={formData.weightCategory} onChange={handleChange} required />
+                    </Form.Group>
+
+                    <Form.Group controlId="formDischarge">
+                        <Form.Label>Разряд</Form.Label>
+                        <Form.Control type="text" name="discharge" value={formData.discharge} onChange={handleChange} required />
+                    </Form.Group>
+
+                    <Form.Group controlId="formDateOdBirth">
+                        <Form.Label>Дата рождения</Form.Label>
+                        <Form.Control type="text" name="dateOfBirth" value={formData.dateOfBirth} onChange={handleChange} required />
+                    </Form.Group>
+
                     <Form.Group controlId="formEmail">
                         <Form.Label>Email</Form.Label>
                         <Form.Control type="email" name="email" value={formData.email} onChange={handleChange} required isInvalid={errors.email} />
@@ -92,6 +123,11 @@ const AddUserModal = ({ show, handleClose, onUserAdded }) => {
                     <Form.Group controlId="formPassword">
                         <Form.Label>Пароль</Form.Label>
                         <Form.Control type="password" name="password" value={formData.password} onChange={handleChange} required />
+                    </Form.Group>
+
+                    <Form.Group controlId="formImage">
+                        <Form.Label>Изображение</Form.Label>
+                        <Form.Control type="file" onChange={handleImageChange} />
                     </Form.Group>
 
                     <Button variant="primary" type="submit">

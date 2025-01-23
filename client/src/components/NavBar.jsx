@@ -61,7 +61,7 @@ function NavBar() {
                     <Nav className="me-auto" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', flexGrow: 1 }}>
                         <Nav.Link href="/">Главная</Nav.Link>
                         <Nav.Link href="#pricing">Новости</Nav.Link>
-                        <Nav.Link href="#pricing">Расписание турниров</Nav.Link>
+                        <Nav.Link href="/our-athlets">Наши спортсмены</Nav.Link>
                         <NavDropdown title="Еще" id="collapsible-nav-dropdown">
                             <NavDropdown.Item href="#action/3.1">Бронирвоание татами</NavDropdown.Item>
                             <NavDropdown.Divider />

@@ -29,7 +29,7 @@ let transporter = nodemailer.createTransport({
 
 class UserController {
     async registration(req, res) {
-        const { name, surname, patronymic, email, phone, password, role } = req.body;
+        const { name, surname, patronymic, weightCategory, discharge, dateOfBirth, email, phone, password, role } = req.body;
         const img = req.file ? req.file.filename : 'default.png';
         try {
             const existingUserByEmail = await Users.findOne({ where: { email } });
@@ -45,6 +45,9 @@ class UserController {
                 name,
                 surname,
                 patronymic,
+                weightCategory,
+                discharge,
+                dateOfBirth,
                 img,
                 email,
                 phone,
@@ -231,7 +234,7 @@ class UserController {
     // Редактирование профиля пользователя
 
     async updateProfile(req, res) {
-        const { name, surname, patronymic } = req.body;
+        const { name, surname, patronymic, weightCategory, discharge, dateOfBirth } = req.body;
         const img = req.file ? req.file.filename : null;
         const userId = req.user.id;
     
@@ -244,6 +247,9 @@ class UserController {
             user.name = name || user.name;
             user.surname = surname || user.surname;
             user.patronymic = patronymic || user.patronymic;
+            user.weightCategory = weightCategory || user.weightCategory;
+            user.discharge = discharge || user.discharge;
+            user.dateOfBirth = dateOfBirth || user.dateOfBirth;
             if (img) {
                 user.img = img;
             }
@@ -251,6 +257,16 @@ class UserController {
             await user.save();
     
             return res.status(200).json({ message: 'Профиль успешно обновлен', user });
+        } catch (e) {
+            console.log(e);
+            return res.status(500).json({ message: 'Ошибка сервера' });
+        }
+    }
+
+    async getAllWithRole (req, res) {
+        try {
+            const users = await Users.findAll({ where: { role: 'USER' } });
+            return res.status(200).json(users);
         } catch (e) {
             console.log(e);
             return res.status(500).json({ message: 'Ошибка сервера' });

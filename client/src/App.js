@@ -10,6 +10,7 @@ import ResetPasswordScreen from './pages/ResetPasswordScreen';
 import Profile from './pages/Profile';
 import AdminScreen from './pages/AdminScreen';
 import AdminCheck from './middleware/AdminCheck';
+import OurAthletsPage from './pages/OurAthlets';
 
 
 function App() {
@@ -23,6 +24,7 @@ function App() {
           <Route path='/forgot-password' element={<ForgotPasswordScreen />} />
           <Route path='/reset-password/:token' element={<ResetPasswordScreen />} />
           <Route path='/profile' element={<Profile />} />
+          <Route path='/our-athlets' element={<OurAthletsPage />} />
           <Route path='/admin' element={
             <AdminCheck>
               <AdminScreen />

@@ -1,0 +1,17 @@
+Весовая категория 
+Weight category
+разряд
+Discharge
+Дата рождения (Сколько лет)
+Date of birth
+
+
+Добавлять: 
+    Сервер:
+        в моделях +
+        В юзер контроллере +
+        В админ контроллере +
+    Клиент:
+        AddUserModal +
+        UserListAdmin +
+        UserCard +

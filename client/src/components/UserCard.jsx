@@ -11,11 +11,14 @@ const UserCard = ({ user, onEdit, onDelete }) => {
             />
             <Card.Body>
                 <Card.Title style={{ fontSize: '1.5rem', fontWeight: 'bold' }}>
-                    {`${user.name} ${user.surname} ${user.patronymic}`}
+                    {` ${user.surname} ${user.name} ${user.patronymic}`}
                 </Card.Title>
                 <Card.Text>
-                    <strong>Email:</strong> {user.email}<br />
-                    <strong>Phone:</strong> {user.phone}<br />
+                    <strong>Адрес эл. почты:</strong> {user.email}<br />
+                    <strong>Номер телефона:</strong> {user.phone}<br />
+                    <strong>Разряд:</strong> {user.discharge}<br />
+                    <strong>Дата рождения:</strong> {user.dateOfBirth}<br />
+                    <strong>Весовая категория:</strong> {user.weightCategory}<br />
                 </Card.Text>
                 <Button className='me-2' variant="primary" onClick={() => onEdit(user)}>Редактировать</Button>
                 <Button variant="danger" onClick={() => onDelete(user.id)}>Удалить</Button>
