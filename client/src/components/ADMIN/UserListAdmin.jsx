@@ -3,7 +3,7 @@ import { Container, Row, Col, Modal, Form, Button, InputGroup, FormControl } fro
 import axios from 'axios';
 import UserCard from '../UserCard';
 
-const UserList = () => {
+const UserListAdmin = () => {
     const [users, setUsers] = useState([]);
     const [filteredUsers, setFilteredUsers] = useState([]);
     const [showEditModal, setShowEditModal] = useState(false);
@@ -102,6 +102,17 @@ const UserList = () => {
         }
     };
 
+    const calculateAge = (dateOfBirth) => {
+        const today = new Date();
+        const birthDate = new Date(dateOfBirth.split('.').reverse().join('-'));
+        let age = today.getFullYear() - birthDate.getFullYear();
+        const m = today.getMonth() - birthDate.getMonth();
+        if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
+            age--;
+        }
+        return age;
+    };
+
     return (
         <Container className='mt-3'>
             <InputGroup className="mb-3">
@@ -177,6 +188,9 @@ const UserList = () => {
                                 value={editedUser.dateOfBirth}
                                 onChange={(e) => setEditedUser({ ...editedUser, dateOfBirth: e.target.value })}
                             />
+                            <Form.Text className="text-muted">
+                                {`(${calculateAge(editedUser.dateOfBirth)} ${calculateAge(editedUser.dateOfBirth) === 1 ? 'год' : calculateAge(editedUser.dateOfBirth) >= 2 && calculateAge(editedUser.dateOfBirth) <= 4 ? 'года' : 'лет'})`}
+                            </Form.Text>
                         </Form.Group>
                         <Form.Group>
                             <Form.Label>Адрес электронной почты</Form.Label>
@@ -209,4 +223,4 @@ const UserList = () => {
     );
 };
 
-export default UserList;
+export default UserListAdmin;

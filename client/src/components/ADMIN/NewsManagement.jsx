@@ -81,6 +81,33 @@ const NewsManagement = () => {
         }
     };
 
+    const cardStyle = {
+        width: '100%',
+        height: '500px',
+        display: 'flex',
+        flexDirection: 'column',
+    };
+
+    const imgStyle = {
+        objectFit: 'cover',
+        height: '200px',
+    };
+
+    const cardBodyStyle = {
+        flex: 1,
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'space-between',
+    };
+
+    const cardTextStyle = {
+        overflow: 'hidden',
+        textOverflow: 'ellipsis',
+        display: '-webkit-box',
+        WebkitLineClamp: 3,
+        WebkitBoxOrient: 'vertical',
+    };
+
     return (
         <Container>
             <h1 className="text-center mt-3">Управление новостями</h1>
@@ -88,11 +115,11 @@ const NewsManagement = () => {
             <Row>
                 {news.map(newsItem => (
                     <Col key={newsItem.id} md={4} className="mb-4">
-                        <Card>
-                            <Card.Img variant="top" src={`http://localhost:3000/uploads/${newsItem.img}`} />
-                            <Card.Body>
+                        <Card style={cardStyle}>
+                            <Card.Img variant="top" src={`http://localhost:3000/uploads/${newsItem.img}`} style={imgStyle} />
+                            <Card.Body style={cardBodyStyle}>
                                 <Card.Title>{newsItem.title}</Card.Title>
-                                <Card.Text>{newsItem.content}</Card.Text>
+                                <Card.Text style={cardTextStyle}>{newsItem.content}</Card.Text>
                                 <Button variant="primary" onClick={() => handleEditNews(newsItem)}>Редактировать</Button>
                                 <Button variant="danger" onClick={() => handleDeleteNews(newsItem.id)}>Удалить</Button>
                             </Card.Body>

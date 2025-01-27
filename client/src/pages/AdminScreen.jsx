@@ -25,7 +25,7 @@ const AdminScreen = () => {
                 <Tab eventKey="trialLessons" title="Управление заявками">
                     <TrialLessonManagement />
                 </Tab>
-                <Tab eventKey="users" title="Управление спортсменами">
+                <Tab eventKey="users" title="Управление спортсменами" style={{ maxWidth: "1400px", margin: '0 auto' }}>
                     <Button className='mt-3 ms-5' variant="primary" onClick={handleShow}>
                         Добавить спортсмена
                     </Button>

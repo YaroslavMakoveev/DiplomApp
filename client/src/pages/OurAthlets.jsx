@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { Card, Container, Row, Col, Button } from "react-bootstrap";
+import { Card, Container, Row, Col, Button, InputGroup, FormControl } from "react-bootstrap";
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 const calculateAge = (dateOfBirth) => {
@@ -28,14 +28,17 @@ const getAgeSuffix = (age) => {
 
 const OurAthletesPage = () => {
     const [users, setUsers] = useState([]);
+    const [filteredUsers, setFilteredUsers] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    const [searchQuery, setSearchQuery] = useState('');
 
     useEffect(() => {
         const fetchUsers = async () => {
             try {
                 const response = await axios.get('http://localhost:3000/api/user/users-with-role');
                 setUsers(response.data);
+                setFilteredUsers(response.data); // Инициализация отфильтрованных пользователей
             } catch (err) {
                 setError(err.message);
             } finally {
@@ -45,6 +48,21 @@ const OurAthletesPage = () => {
 
         fetchUsers();
     }, []);
+
+    useEffect(() => {
+        filterUsers();
+    }, [searchQuery, users]);
+
+    const filterUsers = () => {
+        if (searchQuery) {
+            const filtered = users.filter(user =>
+                `${user.name} ${user.surname} ${user.patronymic}`.toLowerCase().includes(searchQuery.toLowerCase())
+            );
+            setFilteredUsers(filtered);
+        } else {
+            setFilteredUsers(users);
+        }
+    };
 
     if (loading) {
         return <div>Загрузка...</div>;
@@ -57,15 +75,32 @@ const OurAthletesPage = () => {
     return (
         <Container style={{ minHeight: '80vh' }}>
             <h1 className="my-4 text-center">Наши спортсмены</h1>
+            <InputGroup className="mb-3">
+                <FormControl
+                    placeholder="Поиск по ФИО"
+                    aria-label="Поиск по ФИО"
+                    aria-describedby="basic-addon2"
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                />
+                <Button variant="outline-secondary" id="button-addon2">
+                    Поиск
+                </Button>
+            </InputGroup>
             <Row>
-                {users.map(user => {
+                {filteredUsers.map(user => {
                     const age = calculateAge(user.dateOfBirth);
                     const ageSuffix = getAgeSuffix(age);
                     return (
-                        <Col key={user.id} md={3} className="mb-4">
-                            <Card>
-                                <Card.Img variant="top" src={`http://localhost:3000/uploads/${user.img}`} alt={user.name} />
-                                <Card.Body style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between', height: '100%' }}>
+                        <Col key={user.id} md={4} className="mb-4">
+                            <Card style={{ height: '500px', display: 'flex', flexDirection: 'column' }}>
+                                <Card.Img
+                                    style={{ width: '100%', height: '300px', objectFit: 'cover' }}
+                                    variant="top"
+                                    src={`http://localhost:3000/uploads/${user.img}`}
+                                    alt={user.name}
+                                />
+                                <Card.Body style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
                                     <div>
                                         <Card.Title>{user.surname} {user.name} {user.patronymic}</Card.Title>
                                         <Card.Text>
