@@ -2,10 +2,11 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { Card, Container, Row, Col, Button, InputGroup, FormControl } from "react-bootstrap";
 import 'bootstrap/dist/css/bootstrap.min.css';
+import { useNavigate } from 'react-router-dom';
 
 const calculateAge = (dateOfBirth) => {
     const [day, month, year] = dateOfBirth.split('.').map(Number);
-    const birthDate = new Date(year, month - 1, day); // Месяцы в JavaScript начинаются с 0
+    const birthDate = new Date(year, month - 1, day);
     const today = new Date();
     let age = today.getFullYear() - birthDate.getFullYear();
     const monthDifference = today.getMonth() - birthDate.getMonth();
@@ -26,19 +27,20 @@ const getAgeSuffix = (age) => {
     }
 };
 
-const OurAthletesPage = () => {
+const OurAthletes = () => {
     const [users, setUsers] = useState([]);
     const [filteredUsers, setFilteredUsers] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [searchQuery, setSearchQuery] = useState('');
+    const navigate = useNavigate();
 
     useEffect(() => {
         const fetchUsers = async () => {
             try {
                 const response = await axios.get('http://localhost:3000/api/user/users-with-role');
                 setUsers(response.data);
-                setFilteredUsers(response.data); // Инициализация отфильтрованных пользователей
+                setFilteredUsers(response.data);
             } catch (err) {
                 setError(err.message);
             } finally {
@@ -62,6 +64,10 @@ const OurAthletesPage = () => {
         } else {
             setFilteredUsers(users);
         }
+    };
+
+    const handleViewProfile = (userId) => {
+        navigate(`/athlete/${userId}`);
     };
 
     if (loading) {
@@ -109,7 +115,9 @@ const OurAthletesPage = () => {
                                             <strong>Разряд:</strong> {user.discharge} <br />
                                         </Card.Text>
                                     </div>
-                                    <Button className="mt-4" style={{ width: '100%' }} variant="outline-secondary">Подробнее</Button>
+                                    <Button className="mt-4" style={{ width: '100%' }} variant="outline-secondary" onClick={() => handleViewProfile(user.id)}>
+                                        Подробнее
+                                    </Button>
                                 </Card.Body>
                             </Card>
                         </Col>
@@ -120,4 +128,4 @@ const OurAthletesPage = () => {
     );
 };
 
-export default OurAthletesPage;
+export default OurAthletes;

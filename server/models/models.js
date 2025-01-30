@@ -8,6 +8,16 @@ const News = sequelize.define('News', {
     publishedDate: { type: DataTypes.DATE, allowNull: false, defaultValue: DataTypes.NOW },
     img: { type: DataTypes.STRING, allowNull: true }
 });
+
+const Achievements = sequelize.define('Achievements', {
+    id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
+    userId: { type: DataTypes.INTEGER, allowNull: false },
+    competitionName: { type: DataTypes.STRING, allowNull: false },
+    place: { type: DataTypes.INTEGER, allowNull: false },
+    weightCategory: { type: DataTypes.STRING, allowNull: false }, // Новое поле
+    date: { type: DataTypes.DATE, allowNull: false, defaultValue: DataTypes.NOW }
+});
+
 const Users = sequelize.define('users', {
     id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
     name: { type: DataTypes.STRING, allowNull: false },
@@ -41,8 +51,12 @@ const TrialLesson = sequelize.define('TrialLesson', {
     status: { type: DataTypes.STRING, allowNull: false, defaultValue: 'Рассматривается' }
 });
 
+Users.hasMany(Achievements, { foreignKey: 'userId' });
+Achievements.belongsTo(Users, { foreignKey: 'userId' });
+
 module.exports = {
     Users,
     TrialLesson,
-    News
+    News,
+    Achievements
 };

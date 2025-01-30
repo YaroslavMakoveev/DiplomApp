@@ -11,6 +11,10 @@ router.get('/auth', checkAuth, userController.check);
 router.post('/forgot-password', userController.forgotPassword);
 router.post('/reset-password', userController.resetPassword);
 router.put('/update-profile', checkAuth, upload.single('img'), userController.updateProfile);
-router.get('/users-with-role', userController.getAllWithRole)
+router.get('/users-with-role', userController.getAllWithRole);
+router.get('/:id', checkAuth, userController.getUserById);
+router.get('/achievements/:id', checkAuth, userController.getAchievementsByUserId);
+
+module.exports = router;
 
 module.exports = router;

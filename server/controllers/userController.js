@@ -152,7 +152,7 @@ class UserController {
     async check(req, res) {
         const token = generadeJwt(req.user.id, req.user.email, req.user.role);
         const user = await Users.findOne({ where: { id: req.user.id } });
-        return res.json({ token, user, role: user.role });
+        return res.json({ token, user, role: req.user.role });
     }
 
     // Восстановление пароля
@@ -267,6 +267,31 @@ class UserController {
         try {
             const users = await Users.findAll({ where: { role: 'USER' } });
             return res.status(200).json(users);
+        } catch (e) {
+            console.log(e);
+            return res.status(500).json({ message: 'Ошибка сервера' });
+        }
+    }
+
+    async getUserById(req, res) {
+        const { id } = req.params;
+        try {
+            const user = await Users.findOne({ where: { id } });
+            if (!user) {
+                return res.status(404).json({ message: 'Пользователь не найден' });
+            }
+            return res.status(200).json(user);
+        } catch (e) {
+            console.log(e);
+            return res.status(500).json({ message: 'Ошибка сервера' });
+        }
+    }
+
+    async getAchievementsByUserId(req, res) {
+        const { id } = req.params;
+        try {
+            const achievements = await Achievements.findAll({ where: { userId: id } });
+            return res.status(200).json(achievements);
         } catch (e) {
             console.log(e);
             return res.status(500).json({ message: 'Ошибка сервера' });

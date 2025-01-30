@@ -12,6 +12,8 @@ import AdminScreen from './pages/AdminScreen';
 import AdminCheck from './middleware/AdminCheck';
 import OurAthletsPage from './pages/OurAthlets';
 import NewsPage from './pages/NewsPage';
+import AthleteProfile from './pages/AthleteProfileScreen';
+import EditUserAdminScreen from './components/ADMIN/EditUserAdminScreen';
 
 
 function App() {
@@ -27,6 +29,12 @@ function App() {
           <Route path='/reset-password/:token' element={<ResetPasswordScreen />} />
           <Route path='/profile' element={<Profile />} />
           <Route path='/our-athlets' element={<OurAthletsPage />} />
+          <Route path='/athlete/:id' element={<AthleteProfile />} />
+          <Route path="/admin/edit-user/:id" element={
+            <AdminCheck>
+              <EditUserAdminScreen />
+            </AdminCheck>  
+          } />
           <Route path='/admin' element={
             <AdminCheck>
               <AdminScreen />
