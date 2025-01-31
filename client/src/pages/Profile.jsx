@@ -39,7 +39,8 @@ function Profile() {
                         Authorization: `Bearer ${token}`,
                     },
                 });
-                setAchievements(achievementsResponse.data);
+                const sortedAchievements = achievementsResponse.data.sort((a, b) => new Date(b.date) - new Date(a.date));
+                setAchievements(sortedAchievements);
             } catch (error) {
                 console.error('Error fetching user data:', error);
             }
@@ -147,14 +148,14 @@ function Profile() {
                     </Card>
                 </Col>
                 <Col md={6}>
-                <Card>
+                    <Card>
                         <Card.Body>
                             <div>
                                 <h2 style={{ textAlign: 'center', marginBottom: '20px' }}>Достижения</h2>
                                 {achievements.length > 0 ? (
                                     achievements.map(achievement => (
                                         <ul key={achievement.id}>
-                                            <li><strong>{achievement.competitionName} ({achievement.weightCategory} кг):</strong> {achievement.place} место <br /></li>
+                                            <li><strong>({new Date(achievement.date).toLocaleDateString()}) <br /> {achievement.competitionName} ({achievement.weightCategory} кг):</strong> {achievement.place} место <br /></li>
                                         </ul>
                                     ))
                                 ) : (

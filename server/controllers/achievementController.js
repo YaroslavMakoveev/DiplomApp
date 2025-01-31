@@ -2,14 +2,14 @@ const { Achievements } = require('../models/models');
 
 class AchievementController {
     async createAchievement(req, res) {
-        const { userId, competitionName, place, weightCategory } = req.body;
+        const { userId, competitionName, place, weightCategory, date } = req.body;
         try {
             const achievement = await Achievements.create({
                 userId,
                 competitionName,
                 place,
                 weightCategory,
-                date: new Date()
+                date
             });
             return res.status(200).json({ message: 'Достижение успешно добавлено', achievement });
         } catch (error) {

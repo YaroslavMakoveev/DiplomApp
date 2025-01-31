@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { Container, Row, Col, Button, Card } from 'react-bootstrap';
+import { Container, Row, Col, Card } from 'react-bootstrap';
 import { useParams } from 'react-router-dom';
 
 const AthleteProfile = () => {
@@ -32,7 +32,8 @@ const AthleteProfile = () => {
                         Authorization: `Bearer ${token}`,
                     },
                 });
-                setAchievements(response.data);
+                const sortedAchievements = response.data.sort((a, b) => new Date(b.date) - new Date(a.date));
+                setAchievements(sortedAchievements);
             } catch (err) {
                 setError(err.message);
             }
@@ -107,7 +108,7 @@ const AthleteProfile = () => {
                                 {achievements.length > 0 ? (
                                     achievements.map(achievement => (
                                         <ul key={achievement.id}>
-                                            <li><strong>{achievement.competitionName} ({achievement.weightCategory} кг):</strong> {achievement.place} место <br /></li>
+                                            <li><strong>({new Date(achievement.date).toLocaleDateString()}) <br /> {achievement.competitionName} ({achievement.weightCategory} кг):</strong> {achievement.place} место <br /></li>
                                         </ul>
                                     ))
                                 ) : (

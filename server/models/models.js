@@ -14,7 +14,7 @@ const Achievements = sequelize.define('Achievements', {
     userId: { type: DataTypes.INTEGER, allowNull: false },
     competitionName: { type: DataTypes.STRING, allowNull: false },
     place: { type: DataTypes.INTEGER, allowNull: false },
-    weightCategory: { type: DataTypes.STRING, allowNull: false }, // Новое поле
+    weightCategory: { type: DataTypes.STRING, allowNull: false },
     date: { type: DataTypes.DATE, allowNull: false, defaultValue: DataTypes.NOW }
 });
 

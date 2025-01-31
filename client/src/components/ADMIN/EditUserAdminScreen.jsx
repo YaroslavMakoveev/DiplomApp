@@ -49,7 +49,8 @@ const EditUserAdminScreen = () => {
                         Authorization: `Bearer ${token}`,
                     },
                 });
-                setAchievements(response.data);
+                const sortedAchievements = response.data.sort((a, b) => new Date(b.date) - new Date(a.date));
+                setAchievements(sortedAchievements);
             } catch (err) {
                 setError(err.message);
             }
@@ -186,10 +187,12 @@ const EditUserAdminScreen = () => {
                                 {achievements.length > 0 ? (
                                     achievements.map(achievement => (
                                         <div className='d-flex align-items-center' key={achievement.id}>
-                                           <p className='mt-4'><strong  >{achievement.competitionName} ({achievement.weightCategory} кг):</strong> {achievement.place} место </p>
+                                           <p className='mt-4'>
+                                               <strong>({new Date(achievement.date).toLocaleDateString()}) <br /> {achievement.competitionName} ({achievement.weightCategory} кг):</strong> {achievement.place} место
+                                           </p>
                                             <Button className='ms-2 mt-2' variant="danger" onClick={() => handleDeleteAchievement(achievement.id)}>
                                                 Удалить
-                                            </Button> 
+                                            </Button>
                                         </div>
                                     ))
                                 ) : (
@@ -289,7 +292,12 @@ const EditUserAdminScreen = () => {
                 </Modal.Footer>
             </Modal>
 
-            <AddAchievementModal show={showAchievementModal} handleClose={handleCloseAchievementModal} onAchievementAdded={handleAchievementAdded} />
+            <AddAchievementModal
+                show={showAchievementModal}
+                handleClose={handleCloseAchievementModal}
+                onAchievementAdded={handleAchievementAdded}
+                userId={id}
+            />
         </Container>
     );
 };

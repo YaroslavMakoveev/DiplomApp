@@ -25,7 +25,7 @@ const NewsManagement = () => {
     const handleAddNews = () => {
         setFormData({ title: '', content: '' });
         setImage(null);
-        setSelectedNews(null); // Сбрасываем selectedNews
+        setSelectedNews(null);
         setShowModal(true);
     };
 
@@ -57,7 +57,6 @@ const NewsManagement = () => {
 
         try {
             if (selectedNews) {
-                // Редактирование существующей новости
                 await axios.put(`http://localhost:3000/api/news/${selectedNews.id}`, data, {
                     headers: {
                         'Content-Type': 'multipart/form-data',
@@ -65,7 +64,6 @@ const NewsManagement = () => {
                     }
                 });
             } else {
-                // Создание новой новости
                 await axios.post('http://localhost:3000/api/news', data, {
                     headers: {
                         'Content-Type': 'multipart/form-data',
@@ -74,7 +72,7 @@ const NewsManagement = () => {
                 });
             }
             setShowModal(false);
-            setSelectedNews(null); // Сбрасываем selectedNews после успешного создания/редактирования
+            setSelectedNews(null);
             fetchNews();
         } catch (error) {
             console.error('Error submitting news:', error);

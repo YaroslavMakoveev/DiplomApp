@@ -29,14 +29,14 @@ const AuthCheck = ({ children }) => {
   }, []);
 
   if (isAuthenticated === null) {
-    return <div>Loading...</div>; // Показываем загрузку, пока проверяем авторизацию
+    return <div>Loading...</div>;
   }
 
   if (!isAuthenticated) {
-    return <Navigate to="/login" />; // Перенаправляем на страницу регистрации, если не авторизован
+    return <Navigate to="/login" />; 
   }
 
-  return children; // Рендерим дочерние компоненты, если авторизован
+  return children;
 };
 
 export default AuthCheck;

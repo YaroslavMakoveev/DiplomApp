@@ -115,7 +115,7 @@ const TrialLessonAdmin = () => {
                             type="datetime-local"
                             value={confirmDateTime}
                             onChange={(e) => setConfirmDateTime(e.target.value)}
-                            min={new Date().toISOString().slice(0, 16)} // Ограничение на выбор даты и времени в будущем
+                            min={new Date().toISOString().slice(0, 16)}
                         />
                     </Form.Group>
                 </Modal.Body>

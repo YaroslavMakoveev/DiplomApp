@@ -1,46 +1,29 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Modal, Form, Button, Alert } from 'react-bootstrap';
 import axios from 'axios';
 
-const AddAchievementModal = ({ show, handleClose, onAchievementAdded }) => {
-    const [users, setUsers] = useState([]);
-    const [selectedUser, setSelectedUser] = useState(null);
+const AddAchievementModal = ({ show, handleClose, onAchievementAdded, userId }) => {
     const [competitionName, setCompetitionName] = useState('');
     const [place, setPlace] = useState('');
-    const [weightCategory, setWeightCategory] = useState(''); // Новое состояние
+    const [weightCategory, setWeightCategory] = useState('');
+    const [date, setDate] = useState('');
     const [error, setError] = useState(null);
     const token = localStorage.getItem('token');
 
-    useEffect(() => {
-        const fetchUsers = async () => {
-            try {
-                const response = await axios.get('http://localhost:3000/api/user/users-with-role', {
-                    headers: {
-                        Authorization: `Bearer ${token}`,
-                    },
-                });
-                setUsers(response.data);
-            } catch (err) {
-                setError(err.message);
-            }
-        };
-
-        fetchUsers();
-    }, [token]);
-
     const handleSubmit = async (e) => {
         e.preventDefault();
-        if (!selectedUser || !competitionName || !place || !weightCategory) {
+        if (!competitionName || !place || !weightCategory || !date) {
             setError('Пожалуйста, заполните все поля');
             return;
         }
 
         try {
             const response = await axios.post('http://localhost:3000/api/achievements', {
-                userId: selectedUser,
+                userId,
                 competitionName,
                 place,
-                weightCategory // Новое поле
+                weightCategory,
+                date
             }, {
                 headers: {
                     Authorization: `Bearer ${token}`,
@@ -61,17 +44,6 @@ const AddAchievementModal = ({ show, handleClose, onAchievementAdded }) => {
             <Modal.Body>
                 {error && <Alert variant="danger">{error}</Alert>}
                 <Form onSubmit={handleSubmit}>
-                    <Form.Group controlId="formUser">
-                        <Form.Label>Выберите пользователя</Form.Label>
-                        <Form.Control as="select" onChange={(e) => setSelectedUser(e.target.value)}>
-                            <option value="">Выберите пользователя</option>
-                            {users.map(user => (
-                                <option key={user.id} value={user.id}>
-                                    {user.surname} {user.name} {user.patronymic}
-                                </option>
-                            ))}
-                        </Form.Control>
-                    </Form.Group>
                     <Form.Group controlId="formCompetitionName">
                         <Form.Label>Название соревнования</Form.Label>
                         <Form.Control
@@ -99,6 +71,15 @@ const AddAchievementModal = ({ show, handleClose, onAchievementAdded }) => {
                             placeholder="Введите весовую категорию"
                             value={weightCategory}
                             onChange={(e) => setWeightCategory(e.target.value)}
+                            required
+                        />
+                    </Form.Group>
+                    <Form.Group controlId="formDate">
+                        <Form.Label>Дата соревнования</Form.Label>
+                        <Form.Control
+                            type="date"
+                            value={date}
+                            onChange={(e) => setDate(e.target.value)}
                             required
                         />
                     </Form.Group>
