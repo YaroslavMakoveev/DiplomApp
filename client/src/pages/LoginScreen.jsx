@@ -8,7 +8,7 @@ const LoginScreen = () => {
   const [phone, setPhone] = useState('');
   const [password, setPassword] = useState('');
   const [errors, setErrors] = useState({});
-  const [authMethod, setAuthMethod] = useState('email'); // 'email' или 'phone'
+  const [authMethod, setAuthMethod] = useState('email');
   const navigate = useNavigate();
 
   const validateForm = () => {

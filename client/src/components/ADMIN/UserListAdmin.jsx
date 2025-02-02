@@ -2,24 +2,13 @@ import React, { useEffect, useState } from 'react';
 import { Container, Row, Col, Modal, Form, Button, InputGroup, FormControl } from 'react-bootstrap';
 import axios from 'axios';
 import UserCard from '../UserCard';
+import { useNavigate } from 'react-router-dom';
 
 const UserListAdmin = () => {
     const [users, setUsers] = useState([]);
     const [filteredUsers, setFilteredUsers] = useState([]);
-    const [showEditModal, setShowEditModal] = useState(false);
-    const [selectedUser, setSelectedUser] = useState(null);
-    const [editedUser, setEditedUser] = useState({
-        name: '',
-        surname: '',
-        patronymic: '',
-        email: '',
-        phone: '',
-        weightCategory: '',
-        discharge: '',
-        dateOfBirth: '',
-    });
-    const [image, setImage] = useState(null);
     const [searchQuery, setSearchQuery] = useState('');
+    const navigate = useNavigate();
 
     useEffect(() => {
         fetchUsers();
@@ -54,10 +43,8 @@ const UserListAdmin = () => {
         }
     };
 
-    const handleEdit = (user) => {
-        setSelectedUser(user);
-        setEditedUser(user);
-        setShowEditModal(true);
+    const handleEdit = (userId) => {
+        navigate(`/admin/edit-user/${userId}`);
     };
 
     const handleDelete = async (userId) => {
@@ -72,45 +59,6 @@ const UserListAdmin = () => {
         } catch (error) {
             console.error('Error deleting user:', error);
         }
-    };
-
-    const handleImageChange = (e) => {
-        setImage(e.target.files[0]);
-    };
-
-    const updateUser = async () => {
-        try {
-            const token = localStorage.getItem('token');
-            const data = new FormData();
-            for (const key in editedUser) {
-                data.append(key, editedUser[key]);
-            }
-            if (image) {
-                data.append('img', image);
-            }
-
-            await axios.put(`http://localhost:3000/api/admin/users/${selectedUser.id}`, data, {
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                    'Content-Type': 'multipart/form-data'
-                },
-            });
-            setShowEditModal(false);
-            fetchUsers();
-        } catch (error) {
-            console.error('Error updating user:', error);
-        }
-    };
-
-    const calculateAge = (dateOfBirth) => {
-        const today = new Date();
-        const birthDate = new Date(dateOfBirth.split('.').reverse().join('-'));
-        let age = today.getFullYear() - birthDate.getFullYear();
-        const m = today.getMonth() - birthDate.getMonth();
-        if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
-            age--;
-        }
-        return age;
     };
 
     return (
@@ -130,95 +78,10 @@ const UserListAdmin = () => {
             <Row>
                 {filteredUsers.map(user => (
                     <Col key={user.id} md={4} style={{ marginBottom: '20px' }}>
-                        <UserCard user={user} onEdit={handleEdit} onDelete={handleDelete} />
+                        <UserCard user={user} onEdit={() => handleEdit(user.id)} onDelete={() => handleDelete(user.id)} />
                     </Col>
                 ))}
             </Row>
-
-            <Modal show={showEditModal} onHide={() => setShowEditModal(false)}>
-                <Modal.Header closeButton>
-                    <Modal.Title>Редактирование пользователя</Modal.Title>
-                </Modal.Header>
-                <Modal.Body>
-                    <Form>
-                        <Form.Group>
-                            <Form.Label>Имя</Form.Label>
-                            <Form.Control
-                                type="text"
-                                value={editedUser.name}
-                                onChange={(e) => setEditedUser({ ...editedUser, name: e.target.value })}
-                            />
-                        </Form.Group>
-                        <Form.Group>
-                            <Form.Label>Фамилия</Form.Label>
-                            <Form.Control
-                                type="text"
-                                value={editedUser.surname}
-                                onChange={(e) => setEditedUser({ ...editedUser, surname: e.target.value })}
-                            />
-                        </Form.Group>
-                        <Form.Group>
-                            <Form.Label>Отчество</Form.Label>
-                            <Form.Control
-                                type="text"
-                                value={editedUser.patronymic}
-                                onChange={(e) => setEditedUser({ ...editedUser, patronymic: e.target.value })}
-                            />
-                        </Form.Group>
-                        <Form.Group>
-                            <Form.Label>Весовая категория</Form.Label>
-                            <Form.Control
-                                type="text"
-                                value={editedUser.weightCategory}
-                                onChange={(e) => setEditedUser({ ...editedUser, weightCategory: e.target.value })}
-                            />
-                        </Form.Group>
-                        <Form.Group>
-                            <Form.Label>Разряд</Form.Label>
-                            <Form.Control
-                                type="text"
-                                value={editedUser.discharge}
-                                onChange={(e) => setEditedUser({ ...editedUser, discharge: e.target.value })}
-                            />
-                        </Form.Group>
-                        <Form.Group>
-                            <Form.Label>Дата рождения</Form.Label>
-                            <Form.Control
-                                type="text"
-                                value={editedUser.dateOfBirth}
-                                onChange={(e) => setEditedUser({ ...editedUser, dateOfBirth: e.target.value })}
-                            />
-                            <Form.Text className="text-muted">
-                                {`(${calculateAge(editedUser.dateOfBirth)} ${calculateAge(editedUser.dateOfBirth) === 1 ? 'год' : calculateAge(editedUser.dateOfBirth) >= 2 && calculateAge(editedUser.dateOfBirth) <= 4 ? 'года' : 'лет'})`}
-                            </Form.Text>
-                        </Form.Group>
-                        <Form.Group>
-                            <Form.Label>Адрес электронной почты</Form.Label>
-                            <Form.Control
-                                type="email"
-                                value={editedUser.email}
-                                onChange={(e) => setEditedUser({ ...editedUser, email: e.target.value })}
-                            />
-                        </Form.Group>
-                        <Form.Group>
-                            <Form.Label>Номер телефона</Form.Label>
-                            <Form.Control
-                                type="text"
-                                value={editedUser.phone}
-                                onChange={(e) => setEditedUser({ ...editedUser, phone: e.target.value })}
-                            />
-                        </Form.Group>
-                        <Form.Group>
-                            <Form.Label>Изображение</Form.Label>
-                            <Form.Control type="file" onChange={handleImageChange} />
-                        </Form.Group>
-                    </Form>
-                </Modal.Body>
-                <Modal.Footer>
-                    <Button variant="secondary" onClick={() => setShowEditModal(false)}>Отменить</Button>
-                    <Button variant="primary" onClick={updateUser}>Сохранить изменения</Button>
-                </Modal.Footer>
-            </Modal>
         </Container>
     );
 };

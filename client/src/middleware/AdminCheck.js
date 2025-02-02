@@ -33,7 +33,7 @@ const AdminCheck = ({ children }) => {
   }, []);
 
   if (!isAuthenticated) {
-    return null; // или редирект на страницу входа
+    return null;
   }
 
   return isAdmin ? children : null;

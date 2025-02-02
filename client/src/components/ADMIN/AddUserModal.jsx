@@ -74,14 +74,14 @@ const AddUserModal = ({ show, handleClose, onUserAdded }) => {
                 {errors.server && <Alert variant="danger">{errors.server}</Alert>}
                 {success && <Alert variant="success">{success}</Alert>}
                 <Form onSubmit={handleSubmit}>
-                    <Form.Group controlId="formName">
-                        <Form.Label>Имя</Form.Label>
-                        <Form.Control type="text" name="name" value={formData.name} onChange={handleChange} required />
-                    </Form.Group>
-
                     <Form.Group controlId="formSurname">
                         <Form.Label>Фамилия</Form.Label>
                         <Form.Control type="text" name="surname" value={formData.surname} onChange={handleChange} required />
+                    </Form.Group>
+
+                    <Form.Group controlId="formName">
+                        <Form.Label>Имя</Form.Label>
+                        <Form.Control type="text" name="name" value={formData.name} onChange={handleChange} required />
                     </Form.Group>
 
                     <Form.Group controlId="formPatronymic">

@@ -9,6 +9,15 @@ const News = sequelize.define('News', {
     img: { type: DataTypes.STRING, allowNull: true }
 });
 
+const Achievements = sequelize.define('Achievements', {
+    id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
+    userId: { type: DataTypes.INTEGER, allowNull: false },
+    competitionName: { type: DataTypes.STRING, allowNull: false },
+    place: { type: DataTypes.INTEGER, allowNull: false },
+    weightCategory: { type: DataTypes.STRING, allowNull: false },
+    date: { type: DataTypes.DATE, allowNull: false, defaultValue: DataTypes.NOW }
+});
+
 const Users = sequelize.define('users', {
     id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
     name: { type: DataTypes.STRING, allowNull: false },
@@ -62,6 +71,8 @@ Group.belongsToMany(Users, { through: UserGroup, foreignKey: 'groupId' });
 Users.belongsToMany(Group, { through: UserGroup, foreignKey: 'userId' });
 UserGroup.belongsTo(Users, { foreignKey: 'userId' });
 UserGroup.belongsTo(Group, { foreignKey: 'groupId' });
+Users.hasMany(Achievements, { foreignKey: 'userId' });
+Achievements.belongsTo(Users, { foreignKey: 'userId' });
 
 module.exports = {
     Users,
@@ -69,5 +80,6 @@ module.exports = {
     News,
     Group,
     TrainingSchedule,
-    UserGroup
+    UserGroup,
+    Achievements
 };

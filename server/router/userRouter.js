@@ -12,5 +12,7 @@ router.post('/reset-password', userController.resetPassword);
 router.put('/update-profile', checkAuth, upload.single('img'), userController.updateProfile);
 router.get('/users-with-role', userController.getAllWithRole);
 router.get('/search', checkAuth, userController.searchUsers); // Добавляем маршрут для поиска пользователей
+router.get('/:id', checkAuth, userController.getUserById);
+router.get('/achievements/:id', checkAuth, userController.getAchievementsByUserId);
 
 module.exports = router;
