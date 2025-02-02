@@ -272,6 +272,25 @@ class UserController {
             return res.status(500).json({ message: 'Ошибка сервера' });
         }
     }
+
+    async searchUsers(req, res) {
+        const { query } = req.query;
+        try {
+            const users = await Users.findAll({
+                where: {
+                    [Op.or]: [
+                        { name: { [Op.like]: `%${query}%` } },
+                        { surname: { [Op.like]: `%${query}%` } },
+                        { patronymic: { [Op.like]: `%${query}%` } }
+                    ]
+                }
+            });
+            return res.status(200).json(users);
+        } catch (e) {
+            console.log(e);
+            return res.status(500).json({ message: 'Ошибка сервера' });
+        }
+    }
 }
 
 module.exports = new UserController();

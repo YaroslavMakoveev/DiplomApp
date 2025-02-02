@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { Container, Row, Col, Button, Card, Form, Modal } from 'react-bootstrap';
+import { Container, Row, Col, Button, Card, Form, Modal, Table } from 'react-bootstrap';
 
 function Profile() {
     const [user, setUser] = useState(null);
@@ -88,6 +88,42 @@ function Profile() {
         }
     };
 
+    const [userSchedule, setUserSchedule] = useState([]);
+
+    useEffect(() => {
+        const fetchUserData = async () => {
+            const token = localStorage.getItem('token');
+            if (!token) return;
+
+            try {
+                const response = await axios.get('http://localhost:3000/api/user/auth', {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                });
+                setUser(response.data.user);
+                fetchUserSchedule(response.data.user.id);
+            } catch (error) {
+                console.error('Error fetching user data:', error);
+            }
+        };
+
+        const fetchUserSchedule = async (userId) => {
+            try {
+                const response = await axios.get(`http://localhost:3000/api/schedule/user/${userId}/schedule`, {
+                    headers: {
+                        Authorization: `Bearer ${localStorage.getItem('token')}`,
+                    },
+                });
+                setUserSchedule(response.data);
+            } catch (error) {
+                console.error('Error fetching user schedule:', error);
+            }
+        };
+
+        fetchUserData();
+    }, []);
+
     if (!user) {
         return <div>Loading...</div>;
     }
@@ -129,6 +165,32 @@ function Profile() {
                         </Card.Body>
                     </Card>
 
+                </Col>
+                {/* Добавляем компонент UserSchedule */}
+            </Row>
+            <Row className="justify-content-center mt-4">
+                <Col md={12}>
+                    <Card>
+                        <Card.Body>
+                            <h5>Расписание тренировок</h5>
+                            <Table>
+                                <thead>
+                                    <tr>
+                                        <th>День недели</th>
+                                        <th>Время</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {userSchedule.map(training => (
+                                        <tr key={training.id}>
+                                            <td>{training.dayOfWeek}</td>
+                                            <td>{training.startTime} - {training.endTime}</td>
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            </Table>
+                        </Card.Body>
+                    </Card>
                 </Col>
             </Row>
 

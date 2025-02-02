@@ -4,6 +4,7 @@ import TrialLessonManagement from '../components/ADMIN/TrialLessonAdmin';
 import UserListAdmin from "../components/ADMIN/UserListAdmin";
 import NewsManagement from "../components/ADMIN/NewsManagement";
 import AddUserModal from "../components/ADMIN/AddUserModal";
+import GroupManagement from '../components/ADMIN/GroupManagement';
 
 const AdminScreen = () => {
     const [showModal, setShowModal] = useState(false);
@@ -34,6 +35,9 @@ const AdminScreen = () => {
                 </Tab>
                 <Tab eventKey="news" title="Управление новостями">
                     <NewsManagement />
+                </Tab>
+                <Tab eventKey="groups" title="Управление группами">
+                    <GroupManagement />
                 </Tab>
             </Tabs>
         </>
