@@ -4,6 +4,7 @@ import { Container, Row, Col, Button, Card, Form, Modal, Table } from 'react-boo
 
 function Profile() {
     const [user, setUser] = useState(null);
+    const [achievements, setAchievements] = useState([]);
     const [showModal, setShowModal] = useState(false);
     const [formData, setFormData] = useState({
         name: '',
@@ -32,6 +33,14 @@ function Profile() {
                     patronymic: response.data.user.patronymic,
                     img: null
                 });
+
+                const achievementsResponse = await axios.get(`http://localhost:3000/api/achievements/${response.data.user.id}`, {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                });
+                const sortedAchievements = achievementsResponse.data.sort((a, b) => new Date(b.date) - new Date(a.date));
+                setAchievements(sortedAchievements);
             } catch (error) {
                 console.error('Error fetching user data:', error);
             }
@@ -123,13 +132,26 @@ function Profile() {
 
         fetchUserData();
     }, []);
+    const calculateAge = (dateOfBirth) => {
+        const today = new Date();
+        const birthDate = new Date(dateOfBirth.split('.').reverse().join('-'));
+        let age = today.getFullYear() - birthDate.getFullYear();
+        const m = today.getMonth() - birthDate.getMonth();
+        if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
+            age--;
+        }
+        return age;
+    };
 
     if (!user) {
         return <div>Loading...</div>;
     }
 
+    const age = calculateAge(user.dateOfBirth);
+    const ageSuffix = age === 1 ? 'год' : age >= 2 && age <= 4 ? 'года' : 'лет';
+
     return (
-        <Container style={{minHeight: '70vh'}}>
+        <Container style={{ minHeight: '70vh' }}>
             <Row className="justify-content-center mt-4">
                 <Col md={6}>
                     <Card>
@@ -148,7 +170,12 @@ function Profile() {
                                     }}
                                 />
                                 <h3>{user.surname} {user.name} {user.patronymic}</h3>
-                                <Button variant="primary" onClick={handleEditProfile}>
+                                <div className='text-center'>
+                                    <strong>Дата рождения:</strong> {user.dateOfBirth} ({age} {ageSuffix}) <br />
+                                    <strong>Весовая категория:</strong> {user.weightCategory} <br />
+                                    <strong>Разряд:</strong> {user.discharge} <br />
+                                </div>
+                                <Button className='mt-2' variant="primary" onClick={handleEditProfile}>
                                     Изменить данные
                                 </Button>
                             </div>
@@ -158,13 +185,20 @@ function Profile() {
                 <Col md={6}>
                     <Card>
                         <Card.Body>
-                            <div style={{ }}>
-                                <h5 style={{textAlign: 'center'}}>Достижения</h5>
-                                {/* Тут будет список турниров */}
+                            <div>
+                                <h2 style={{ textAlign: 'center', marginBottom: '20px' }}>Достижения</h2>
+                                {achievements.length > 0 ? (
+                                    achievements.map(achievement => (
+                                        <ul key={achievement.id}>
+                                            <li><strong>({new Date(achievement.date).toLocaleDateString()}) <br /> {achievement.competitionName} ({achievement.weightCategory} кг):</strong> {achievement.place} место <br /></li>
+                                        </ul>
+                                    ))
+                                ) : (
+                                    <div className='text-center'>Достижений пока нет</div>
+                                )}
                             </div>
                         </Card.Body>
                     </Card>
-
                 </Col>
                 {/* Добавляем компонент UserSchedule */}
             </Row>
@@ -193,7 +227,6 @@ function Profile() {
                     </Card>
                 </Col>
             </Row>
-
 
             {/* Модальное окно для изменения данных */}
             <Modal show={showModal} onHide={handleCloseModal}>
