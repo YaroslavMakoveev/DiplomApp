@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Carousel, Container, Row, Col, Form, Button, Card, Alert } from 'react-bootstrap';
 import axios from 'axios';
+import Reviews from '../components/Reviews'
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 const HomeScreen = () => {
@@ -208,7 +209,6 @@ const HomeScreen = () => {
                         </Card>
                     </Col>
                 </Row>
-
                 <Row className="my-4 d-flex justify-content-center mt-5">
                     <Col md={6} style={{ boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)', backgroundColor: '#f8f9fa', borderRadius: '15px', padding: '30px', maxWidth: '500px', boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)' }}>
                         <h2 className='text-center mb-4'>Запись на пробное занятие</h2>
@@ -252,6 +252,7 @@ const HomeScreen = () => {
                         </Form>
                     </Col>
                 </Row>
+                <Reviews />
             </Container>
         </div>
     );

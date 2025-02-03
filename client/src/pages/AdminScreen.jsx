@@ -5,6 +5,7 @@ import UserListAdmin from "../components/ADMIN/UserListAdmin";
 import NewsManagement from "../components/ADMIN/NewsManagement";
 import AddUserModal from "../components/ADMIN/AddUserModal";
 import GroupManagement from '../components/ADMIN/GroupManagement';
+import ReviewManagement from '../components/ADMIN/ReviewManagement';
 
 const AdminScreen = () => {
     const [showModal, setShowModal] = useState(false);
@@ -39,6 +40,9 @@ const AdminScreen = () => {
                 </Tab>
                 <Tab eventKey="groups" title="Управление группами">
                     <GroupManagement />
+                </Tab>
+                <Tab eventKey="reviews" title="Управление отзывами" style={{ maxWidth: "1400px", margin: '-1px auto 0px auto', border: '1px solid #dee2e6' }}>
+                    <ReviewManagement />
                 </Tab>
             </Tabs>
         </>

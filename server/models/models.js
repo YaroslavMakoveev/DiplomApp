@@ -64,6 +64,15 @@ const UserGroup = sequelize.define('UserGroup', {
     groupId: { type: DataTypes.INTEGER, allowNull: false }
 });
 
+const Reviews = sequelize.define('Reviews', {
+    id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
+    name: { type: DataTypes.STRING, allowNull: false },
+    surname: { type: DataTypes.STRING, allowNull: true },
+    email: { type: DataTypes.STRING, allowNull: false },
+    message: { type: DataTypes.TEXT, allowNull: false },
+    date: { type: DataTypes.DATE, allowNull: false, defaultValue: DataTypes.NOW }
+});
+
 // Связи между моделями
 Group.hasMany(TrainingSchedule, { foreignKey: 'groupId' });
 TrainingSchedule.belongsTo(Group, { foreignKey: 'groupId' });
@@ -81,5 +90,6 @@ module.exports = {
     Group,
     TrainingSchedule,
     UserGroup,
-    Achievements
+    Achievements,
+    Reviews
 };

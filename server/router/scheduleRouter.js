@@ -13,8 +13,9 @@ router.get('/user/:userId', checkAuth, scheduleController.getUserSchedule);
 router.delete('/training/:id', checkAuth, checkRole('ADMIN'), scheduleController.deleteTraining);
 router.delete('/group/:id', checkAuth, checkRole('ADMIN'), scheduleController.deleteGroup);
 router.post('/group/add-user', checkAuth, checkRole('ADMIN'), scheduleController.addUserToGroup);
-router.post('/group/remove-user', checkAuth, checkRole('ADMIN'), scheduleController.removeUserFromGroup); // Добавляем маршрут для удаления пользователя из группы
+router.post('/group/remove-user', checkAuth, checkRole('ADMIN'), scheduleController.removeUserFromGroup);
 router.get('/group/:groupId/members', checkAuth, scheduleController.getGroupMembers);
 router.get('/user/:userId/schedule', checkAuth, scheduleController.getUserSchedule);
+router.get('/group/:groupId/members-count', checkAuth, checkRole('ADMIN'), scheduleController.getGroupMembersCount);
 
 module.exports = router;

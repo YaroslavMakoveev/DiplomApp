@@ -18,6 +18,7 @@ const GroupManagement = () => {
     const [selectedGroupMembers, setSelectedGroupMembers] = useState([]);
     const [searchQuery, setSearchQuery] = useState('');
     const [searchResults, setSearchResults] = useState([]);
+    const [groupMembersCount, setGroupMembersCount] = useState({});
 
     useEffect(() => {
         fetchGroups();
@@ -40,6 +41,16 @@ const GroupManagement = () => {
                 }
             });
             setGroups(response.data);
+            const membersCount = {};
+            for (const group of response.data) {
+                const countResponse = await axios.get(`http://localhost:3000/api/schedule/group/${group.id}/members-count`, {
+                    headers: {
+                        Authorization: `Bearer ${localStorage.getItem('token')}`
+                    }
+                });
+                membersCount[group.id] = countResponse.data.count;
+            }
+            setGroupMembersCount(membersCount);
         } catch (error) {
             console.error('Error fetching groups:', error);
         }
@@ -210,7 +221,12 @@ const GroupManagement = () => {
                 {groups.map(group => (
                     <Col key={group.id} md={4}>
                         <div style={{ boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)', padding: '20px', marginBottom: '20px', borderRadius: '8px' }}>
-                            <h3 onClick={() => setSelectedGroup(group.id)}>{group.name}</h3>
+                            <h3 onClick={() => setSelectedGroup(group.id)}>
+                                {group.name}
+                                <span style={{ fontSize: '0.5em', color: 'gray', marginLeft: '10px' }}>
+                                    {groupMembersCount[group.id]} чел.
+                                </span>
+                            </h3>
                             <Button variant="primary" onClick={() => handleOpenMembersModal(group.id)}>Состав</Button>
                             <Button variant="danger" onClick={() => handleDeleteGroup(group.id)}>Удалить группу</Button>
                             {selectedGroup === group.id && (
@@ -334,7 +350,7 @@ const GroupManagement = () => {
                         </tbody>
                     </Table>
                     <Table>
-                        <thead>
+                        <thead>Текущий состав
                             <tr>
                                 <th>ФИО</th>
                                 <th>Действия</th>

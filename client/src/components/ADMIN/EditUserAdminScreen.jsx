@@ -188,7 +188,7 @@ const EditUserAdminScreen = () => {
                                     achievements.map(achievement => (
                                         <div className='d-flex align-items-center' key={achievement.id}>
                                            <p className='mt-4'>
-                                               <strong>({new Date(achievement.date).toLocaleDateString()}) <br /> {achievement.competitionName} ({achievement.weightCategory} кг):</strong> {achievement.place} место
+                                               <strong>{new Date(achievement.date).toLocaleDateString('ru-RU', { day: '2-digit', month: '2-digit', year: 'numeric' })} <br /> {achievement.competitionName} ({achievement.weightCategory} кг):</strong> {achievement.place} место
                                            </p>
                                             <Button className='ms-2 mt-2' variant="danger" onClick={() => handleDeleteAchievement(achievement.id)}>
                                                 Удалить

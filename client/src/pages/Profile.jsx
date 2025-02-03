@@ -190,7 +190,7 @@ function Profile() {
                                 {achievements.length > 0 ? (
                                     achievements.map(achievement => (
                                         <ul key={achievement.id}>
-                                            <li><strong>({new Date(achievement.date).toLocaleDateString()}) <br /> {achievement.competitionName} ({achievement.weightCategory} кг):</strong> {achievement.place} место <br /></li>
+                                            <li><strong>{new Date(achievement.date).toLocaleDateString('ru-RU', { day: '2-digit', month: '2-digit', year: 'numeric' })} <br /> {achievement.competitionName} ({achievement.weightCategory} кг):</strong> {achievement.place} место <br /></li>
                                         </ul>
                                     ))
                                 ) : (

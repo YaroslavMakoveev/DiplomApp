@@ -6,7 +6,9 @@ const newsRouter = require('./newsRouter');
 const scheduleRouter = require('./scheduleRouter');
 const achievementRouter = require('./achievementRouter');
 const router = new Router();
+const reviewRouter = require('./reviewRouter');
 
+router.use('/reviews', reviewRouter);
 router.use('/schedule', scheduleRouter);
 router.use('/user', userRouter);
 router.use('/trial', trialRouter);

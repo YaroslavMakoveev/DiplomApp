@@ -145,6 +145,17 @@ class ScheduleController {
             return res.status(500).json({ message: 'Server Error', error: e.message });
         }
     }
+
+    async getGroupMembersCount(req, res) {
+        const { groupId } = req.params;
+        try {
+            const count = await UserGroup.count({ where: { groupId } });
+            return res.status(200).json({ count });
+        } catch (e) {
+            console.error('Error fetching group members count:', e);
+            return res.status(500).json({ message: 'Server Error', error: e.message });
+        }
+    }
 }
 
 module.exports = new ScheduleController();
