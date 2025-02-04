@@ -42,6 +42,7 @@ function NavBar() {
         localStorage.removeItem('role')
         setIsAuthenticated(false);
         setUser(null);
+        window.location.reload();
     };
 
     return (

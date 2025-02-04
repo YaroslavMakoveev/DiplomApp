@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { Container, Row, Col, Card, Form, Button, Modal, Pagination } from 'react-bootstrap';
 import axios from 'axios';
+import { jwtDecode } from 'jwt-decode';
+
 
 const Reviews = () => {
     const [reviews, setReviews] = useState([]);
@@ -13,9 +15,15 @@ const Reviews = () => {
     const [isSubmitting, setIsSubmitting] = useState(false);
     const reviewsPerPage = 6;
     const initialReviewsCount = 3;
+    const [userRole, setUserRole] = useState(null);
 
     useEffect(() => {
         fetchReviews();
+        const token = localStorage.getItem('token');
+        if (token) {
+            const decodedToken = jwtDecode(token);
+            setUserRole(decodedToken.role);
+        }
     }, []);
 
     const fetchReviews = async () => {
@@ -126,7 +134,9 @@ const Reviews = () => {
                                         {review.message.length > 100 ? `${review.message.substring(0, 100)}...` : review.message}
                                     </Card.Text>
                                 </div>
-                                <Button variant="danger" onClick={() => handleDelete(review.id)}>Удалить</Button>
+                                {userRole === 'ADMIN' && (
+                                    <Button variant="danger" onClick={() => handleDelete(review.id)}>Удалить</Button>
+                                )}
                             </Card.Body>
                         </Card>
                     </Col>
