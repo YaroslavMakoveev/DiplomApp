@@ -29,6 +29,16 @@ class ReviewController {
             return res.status(500).json({ message: 'Server Error' });
         }
     }
+
+    async checkEmail(req, res) {
+        const { email } = req.query;
+        try {
+            const reviews = await Reviews.findAll({ where: { email } });
+            return res.status(200).json(reviews);
+        } catch (e) {
+            return res.status(500).json({ message: 'Server Error' });
+        }
+    }
 }
 
 module.exports = new ReviewController();

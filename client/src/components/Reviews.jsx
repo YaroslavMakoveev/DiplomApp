@@ -59,7 +59,7 @@ const Reviews = () => {
 
         // Проверка на существование отзыва с указанной почтой
         try {
-            const response = await axios.get(`http://localhost:3000/api/reviews?email=${formData.email}`);
+            const response = await axios.get(`http://localhost:3000/api/reviews/check-email?email=${formData.email}`);
             if (response.data.length > 0) {
                 newErrors.email = 'Под этой почтой уже оставлен отзыв.';
             }

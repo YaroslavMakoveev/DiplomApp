@@ -73,7 +73,7 @@ const NewsPage = () => {
                                     <div style={{ textAlign: 'left', padding: '20px' }}>
                                         <h3>{item.title}</h3>
                                         <p>{item.content}</p>
-                                        <p><strong>Дата публикации:</strong> {new Date(item.publishedDate).toLocaleDateString()}</p>
+                                        <p><strong>Дата публикации:</strong> {new Date(item.publishedDate).toLocaleDateString('ru-RU', { day: '2-digit', month: '2-digit', year: 'numeric' })}</p>
                                     </div>
                                 </Col>
                                 {item.img && (
