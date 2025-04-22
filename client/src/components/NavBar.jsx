@@ -63,15 +63,6 @@ function NavBar() {
                         <Nav.Link href="/">Главная</Nav.Link>
                         <Nav.Link href="/news">Новости</Nav.Link>
                         <Nav.Link href="/our-athlets">Наши спортсмены</Nav.Link>
-                        <NavDropdown title="Еще" id="collapsible-nav-dropdown">
-                            <NavDropdown.Item href="#action/3.1">Бронирвоание татами</NavDropdown.Item>
-                            <NavDropdown.Divider />
-                            <NavDropdown.Item href="#action/3.2">Еще чето</NavDropdown.Item>
-                            <NavDropdown.Divider />
-                            <NavDropdown.Item href="#action/3.3">Еще чето</NavDropdown.Item>
-                            <NavDropdown.Divider />
-                            <NavDropdown.Item href="#action/3.4">Еще чето</NavDropdown.Item>
-                        </NavDropdown>
                     </Nav>
                     <Nav style={{ display: 'flex', alignItems: 'center' }}>
                         {isAuthenticated ? (

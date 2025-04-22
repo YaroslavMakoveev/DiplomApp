@@ -24,7 +24,7 @@ const Users = sequelize.define('users', {
     surname: { type: DataTypes.STRING, allowNull: false },
     patronymic: { type: DataTypes.STRING, allowNull: false },
     dateOfBirth: { type: DataTypes.STRING, allowNull: false },
-    weightCategory: { type: DataTypes.STRING, allowNull: false },
+    weightCategory: { type: DataTypes.STRING, allowNull: true, defaultValue: 'Не заполнено' },
     discharge: { type: DataTypes.STRING, allowNull: true, defaultValue: 'Нет' },
     img: { type: DataTypes.STRING, allowNull: true, defaultValue: 'default.png' },
     email: { type: DataTypes.STRING, allowNull: false, unique: true },

@@ -28,7 +28,7 @@ class TrialLessonController {
             const existingTrialLessonByEmail = await TrialLesson.findOne({ where: { email } });
 
             if (existingTrialLessonByPhone || existingTrialLessonByEmail) {
-                return res.status(400).json({ message: 'Заявка с таким телефоном или почтой уже существует.' });
+                return res.status(409).json({ message: 'Заявка с таким телефоном или почтой уже существует.' });
             }
 
             const trialLesson = await TrialLesson.create({

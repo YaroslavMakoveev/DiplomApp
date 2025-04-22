@@ -8,6 +8,8 @@ const UserListAdmin = () => {
     const [users, setUsers] = useState([]);
     const [filteredUsers, setFilteredUsers] = useState([]);
     const [searchQuery, setSearchQuery] = useState('');
+    const [showConfirmModal, setShowConfirmModal] = useState(false);
+    const [userToDelete, setUserToDelete] = useState(null);
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -47,41 +49,67 @@ const UserListAdmin = () => {
         navigate(`/admin/edit-user/${userId}`);
     };
 
-    const handleDelete = async (userId) => {
+    const confirmDelete = (userId) => {
+        setUserToDelete(userId);
+        setShowConfirmModal(true);
+    };
+
+    const handleDeleteConfirmed = async () => {
+        if (!userToDelete) return;
         try {
             const token = localStorage.getItem('token');
-            await axios.delete(`http://localhost:3000/api/admin/users/${userId}`, {
+            await axios.delete(`http://localhost:3000/api/admin/users/${userToDelete}`, {
                 headers: {
                     Authorization: `Bearer ${token}`,
                 },
             });
-            setUsers(users.filter(user => user.id !== userId));
+            setUsers(users.filter(user => user.id !== userToDelete));
         } catch (error) {
             console.error('Error deleting user:', error);
+        } finally {
+            setShowConfirmModal(false);
+            setUserToDelete(null);
         }
     };
 
     return (
-        <Container className='mt-3'>
+        <Container className='mt-3' style={{minHeight: '60vh'}}>
             <InputGroup className="mb-3">
                 <FormControl
                     placeholder="Поиск по ФИО"
                     aria-label="Поиск по ФИО"
-                    aria-describedby="basic-addon2"
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
                 />
-                <Button variant="outline-secondary" id="button-addon2">
-                    Поиск
-                </Button>
+                <Button variant="outline-secondary">Поиск</Button>
             </InputGroup>
             <Row>
                 {filteredUsers.map(user => (
                     <Col key={user.id} md={4} style={{ marginBottom: '20px' }}>
-                        <UserCard user={user} onEdit={() => handleEdit(user.id)} onDelete={() => handleDelete(user.id)} />
+                        <UserCard
+                            user={user}
+                            onEdit={() => handleEdit(user.id)}
+                            onDelete={() => confirmDelete(user.id)}
+                        />
                     </Col>
                 ))}
             </Row>
+
+            {/* Модальное окно подтверждения */}
+            <Modal show={showConfirmModal} onHide={() => setShowConfirmModal(false)} centered>
+                <Modal.Header closeButton>
+                    <Modal.Title>Подтвердите удаление</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>Вы уверены, что хотите удалить пользователя?</Modal.Body>
+                <Modal.Footer>
+                    <Button variant="secondary" onClick={() => setShowConfirmModal(false)}>
+                        Отмена
+                    </Button>
+                    <Button variant="danger" onClick={handleDeleteConfirmed}>
+                        Удалить
+                    </Button>
+                </Modal.Footer>
+            </Modal>
         </Container>
     );
 };

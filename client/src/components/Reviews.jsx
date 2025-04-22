@@ -120,7 +120,7 @@ const Reviews = () => {
 
     return (
         <Container>
-            <h2 className='text-center mt-3'>Отзывы о нас</h2>
+            <h2 className='text-center mt-5'>Отзывы о нас</h2>
             <Row>
                 {displayedReviews.map(review => (
                     <Col key={review.id} md={4} className="mb-4">

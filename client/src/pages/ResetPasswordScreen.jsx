@@ -2,24 +2,27 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import { Form, Button, Container } from 'react-bootstrap';
 import { useParams } from 'react-router-dom';
+import {useNavigate} from 'react-router-dom'
 
 const ResetPasswordScreen = () => {
   const { token } = useParams();
   const [password, setPassword] = useState('');
   const [message, setMessage] = useState('');
+  const navigate = useNavigate('')
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
       const response = await axios.post('http://localhost:3000/api/user/reset-password', { token, password });
       setMessage(response.data.message);
+      navigate('/login')
     } catch (error) {
       setMessage('Ошибка при сбросе пароля');
     }
   };
 
   return (
-    <Container className="mt-3" style={{ width: '50%' }}>
+    <Container style={{ width: '50%', minHeight: '45vh', marginTop: '10%' }}>
       <h2 style={{ color: 'black' }} className='text-center mt-4'>Сброс пароля</h2>
       <Form onSubmit={handleSubmit}>
         <Form.Group controlId="formPassword">
