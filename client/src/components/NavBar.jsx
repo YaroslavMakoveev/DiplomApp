@@ -6,12 +6,14 @@ import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
 import NavDropdown from 'react-bootstrap/NavDropdown';
 import { Button } from 'react-bootstrap';
+import {useNavigate} from 'react-router-dom'
 
 import AdminCheck from '../middleware/AdminCheck'
 
 function NavBar() {
     const [isAuthenticated, setIsAuthenticated] = useState(false);
     const [user, setUser] = useState(null);
+    const navigate = useNavigate('');
 
     useEffect(() => {
         const checkAuth = async () => {
@@ -42,6 +44,7 @@ function NavBar() {
         localStorage.removeItem('role')
         setIsAuthenticated(false);
         setUser(null);
+        navigate('/')
         window.location.reload();
     };
 

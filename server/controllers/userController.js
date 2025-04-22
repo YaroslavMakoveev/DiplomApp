@@ -102,9 +102,7 @@ class UserController {
                 user = await Users.findOne({ where: { email } });
             } else if (phone) {
                 user = await Users.findOne({ where: { phone } });
-            } else if (!user) {
-                return res.status(404).json({ message: 'Пользователь с такими данными не зарегистрирован!' });
-            }
+            } 
             if (!user) {
                 return res.status(404).json({ message: 'Пользователь с такими данными не зарегистрирован' });
             }

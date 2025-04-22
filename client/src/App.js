@@ -19,8 +19,8 @@ import EditUserAdminScreen from './components/ADMIN/EditUserAdminScreen';
 function App() {
   return (
     <>
-      <NavBar />
       <Router>
+      <NavBar />
         <Routes>
           <Route path='/news' element={<NewsPage />} />
           <Route path='/' element={<HomeScreen />} />

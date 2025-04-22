@@ -3,6 +3,18 @@ import axios from 'axios';
 import { Form, Button, Container, Tabs, Tab } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 
+const formatPhoneNumber = (value) => {
+  const digits = value.replace(/\D/g, '');
+  let formatted = digits.startsWith('8') ? digits.slice(1) : digits;
+  formatted = formatted.startsWith('7') ? formatted.slice(1) : formatted;
+
+  if (formatted.length === 0) return '+7';
+  if (formatted.length <= 3) return `+7(${formatted}`;
+  if (formatted.length <= 6) return `+7(${formatted.slice(0, 3)})-${formatted.slice(3)}`;
+  if (formatted.length <= 8) return `+7(${formatted.slice(0, 3)})-${formatted.slice(3, 6)}-${formatted.slice(6)}`;
+  return `+7(${formatted.slice(0, 3)})-${formatted.slice(3, 6)}-${formatted.slice(6, 8)}-${formatted.slice(8, 10)}`;
+};
+
 const LoginScreen = () => {
   const [email, setEmail] = useState('');
   const [phone, setPhone] = useState('');
@@ -36,7 +48,7 @@ const LoginScreen = () => {
     try {
       const response = await axios.post('http://localhost:3000/api/user/login', {
         email: authMethod === 'email' ? email : '',
-        phone: authMethod === 'phone' ? phone : '',
+        phone: authMethod === 'phone' ? phone.replace(/\D/g, '') : '',
         password,
       });
       localStorage.setItem('token', response.data.token);
@@ -45,9 +57,9 @@ const LoginScreen = () => {
       window.location.reload();
     } catch (error) {
       if (error.response && error.response.status === 404) {
-        setErrors({ 
+        setErrors({
           email: 'Неверный email или номер телефона',
-          phone: 'Неверный email или номер телефона'
+          phone: 'Неверный email или номер телефона',
         });
       }
       if (error.response && error.response.status === 403) {
@@ -110,10 +122,13 @@ const LoginScreen = () => {
               <Form.Label style={{ color: 'black' }}>Номер телефона</Form.Label>
               <Form.Control
                 type="text"
-                placeholder='Введите ваш номер телефона'
+                placeholder='+7(ХХХ)-ХХХ-ХХ-ХХ'
                 name="phone"
                 value={phone}
-                onChange={(e) => setPhone(e.target.value)}
+                onChange={(e) => {
+                  const formatted = formatPhoneNumber(e.target.value);
+                  setPhone(formatted);
+                }}
                 isInvalid={!!errors.phone}
               />
               <Form.Control.Feedback type="invalid">
