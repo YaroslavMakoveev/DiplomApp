@@ -48,7 +48,7 @@ const LoginScreen = () => {
     try {
       const response = await axios.post('http://localhost:3000/api/user/login', {
         email: authMethod === 'email' ? email : '',
-        phone: authMethod === 'phone' ? phone.replace(/\D/g, '') : '',
+        phone: authMethod === 'phone' ? phone : '', // Передаем отформатированный номер телефона
         password,
       });
       localStorage.setItem('token', response.data.token);
@@ -70,7 +70,7 @@ const LoginScreen = () => {
 
   return (
     <Container className="mt-3" style={{ width: '50%', minHeight: '70vh' }}>
-      <h2 style={{ color: 'black', marginTop: '20%' }} className='text-center'>Авторизация</h2>
+      <h2 style={{ color: 'black', marginTop: '20%' }} className="text-center">Авторизация</h2>
       <Tabs
         defaultActiveKey="email"
         id="auth-method-tabs"
@@ -84,7 +84,7 @@ const LoginScreen = () => {
               <Form.Label style={{ color: 'black' }}>Email</Form.Label>
               <Form.Control
                 type="email"
-                placeholder='Введите ваш email'
+                placeholder="Введите ваш email"
                 name="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
@@ -98,7 +98,7 @@ const LoginScreen = () => {
               <Form.Label style={{ color: 'black' }}>Пароль</Form.Label>
               <Form.Control
                 type="password"
-                placeholder='Введите ваш пароль'
+                placeholder="Введите ваш пароль"
                 name="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
@@ -122,7 +122,7 @@ const LoginScreen = () => {
               <Form.Label style={{ color: 'black' }}>Номер телефона</Form.Label>
               <Form.Control
                 type="text"
-                placeholder='+7(ХХХ)-ХХХ-ХХ-ХХ'
+                placeholder="+7(XXX)-XXX-XX-XX"
                 name="phone"
                 value={phone}
                 onChange={(e) => {
@@ -139,7 +139,7 @@ const LoginScreen = () => {
               <Form.Label style={{ color: 'black' }}>Пароль</Form.Label>
               <Form.Control
                 type="password"
-                placeholder='Введите ваш пароль'
+                placeholder="Введите ваш пароль"
                 name="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
