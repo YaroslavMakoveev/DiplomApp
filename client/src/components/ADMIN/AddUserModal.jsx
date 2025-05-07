@@ -220,7 +220,7 @@ const AddUserModal = ({ show, handleClose, onUserAdded }) => {
                         <Form.Control type="file" onChange={handleImageChange} />
                     </Form.Group>
 
-                    <Button variant="primary" type="submit">
+                    <Button className='mt-2' variant="primary" type="submit">
                         Зарегистрировать
                     </Button>
                 </Form>
