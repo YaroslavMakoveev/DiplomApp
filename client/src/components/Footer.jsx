@@ -11,8 +11,8 @@ function Footer() {
                         <h5>Навигация по сайту</h5>
                         <Nav style={{ display: 'flex', flexDirection: 'column', color: '#000' }}>
                             <Nav.Link href="/" style={{ color: '#000' }}>Главная</Nav.Link>
-                            <Nav.Link href="#pricing" style={{ color: '#000' }}>Новости</Nav.Link>
-                            <Nav.Link href="#pricing" style={{ color: '#000' }}>Расписание турниров</Nav.Link>
+                            <Nav.Link href="/news" style={{ color: '#000' }}>Новости</Nav.Link>
+                            <Nav.Link href="/our-athlets" style={{ color: '#000' }}>Наши спортсмены</Nav.Link>
                         </Nav>
                     </Col>
 
@@ -31,9 +31,9 @@ function Footer() {
 
                     <Col md={4} style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'flex-end' }}>
                         <h5>Контакты</h5>
-                        <p>Адрес: ул. Примерная, 123, г. Примерск</p>
+                        <p>Адрес: ул. Школьная, 24, пгт. Ставрово</p>
                         <p>Телефон: +7 (123) 456-78-90</p>
-                        <p>Email: info@samboschool.ru</p>
+                        <p>Email: sambostavrobo@mail.ru</p>
                     </Col>
                 </Row>
             </Container>
