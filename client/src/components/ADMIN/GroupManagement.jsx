@@ -216,7 +216,7 @@ const GroupManagement = () => {
     return (
         <Container>
             <h1>Управление группами и расписанием</h1>
-            <Button onClick={() => setShowModal(true)}>Создать группу</Button>
+            <Button className='mb-3' onClick={() => setShowModal(true)}>Создать группу</Button>
             <Row>
                 {groups.map(group => (
                     <Col key={group.id} md={4}>
@@ -227,8 +227,10 @@ const GroupManagement = () => {
                                     {groupMembersCount[group.id]} чел.
                                 </span>
                             </h3>
-                            <Button variant="primary" onClick={() => handleOpenMembersModal(group.id)}>Состав</Button>
-                            <Button variant="danger" onClick={() => handleDeleteGroup(group.id)}>Удалить группу</Button>
+                            <div className="d-flex gap-2 mb-3">
+                                <Button variant="primary" onClick={() => handleOpenMembersModal(group.id)}>Состав</Button>
+                                <Button variant="danger" onClick={() => handleDeleteGroup(group.id)}>Удалить группу</Button>
+                            </div>
                             {selectedGroup === group.id && (
                                 <div>
                                     <Form>
@@ -264,7 +266,7 @@ const GroupManagement = () => {
                                                 onChange={(e) => setTrainingData({ ...trainingData, endTime: e.target.value })}
                                             />
                                         </Form.Group>
-                                        <Button onClick={() => handleAddTraining(group.id)}>Добавить тренировку</Button>
+                                        <Button className="mt-3" onClick={() => handleAddTraining(group.id)}>Добавить тренировку</Button>
                                     </Form>
                                     <Table>
                                         <thead>

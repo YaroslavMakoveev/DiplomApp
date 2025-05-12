@@ -16,7 +16,10 @@ class NewsController {
 
     async getNews(req, res) {
         try {
-            const news = await News.findAll();
+            const news = await News.findAll({
+                order: [['createdAt', 'DESC']]
+            });
+
             return res.status(200).json(news);
         } catch (e) {
             console.log(e);
