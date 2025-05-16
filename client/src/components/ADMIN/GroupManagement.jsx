@@ -19,6 +19,12 @@ const GroupManagement = () => {
     const [searchQuery, setSearchQuery] = useState('');
     const [searchResults, setSearchResults] = useState([]);
     const [groupMembersCount, setGroupMembersCount] = useState({});
+    const [showConfirmModal, setShowConfirmModal] = useState(false);
+    const [conflictTraining, setConflictTraining] = useState(null);
+    const [pendingTraining, setPendingTraining] = useState(null);
+    const [showUserConfirmModal, setShowUserConfirmModal] = useState(false);
+    const [conflictGroup, setConflictGroup] = useState(null);
+    const [pendingUser, setPendingUser] = useState(null);
 
     useEffect(() => {
         fetchGroups();
@@ -106,12 +112,51 @@ const GroupManagement = () => {
             setTrainingData({ dayOfWeek: 'Понедельник', startTime: '17:00', endTime: '18:00' });
             fetchSchedule(groupId);
         } catch (error) {
-            if (error.response && error.response.data.message) {
-                alert(error.response.data.message);
+            if (error.response && error.response.status === 400) {
+                console.log('Conflict training data:', error.response.data.existingTraining);
+                setConflictTraining(error.response.data.existingTraining);
+                setPendingTraining({
+                    groupId,
+                    dayOfWeek: trainingData.dayOfWeek,
+                    startTime: trainingData.startTime,
+                    endTime: trainingData.endTime
+                });
+                setShowConfirmModal(true);
             } else {
                 console.error('Error adding training:', error);
             }
         }
+    };
+
+    const handleConfirmAddTraining = async () => {
+        try {
+            const response = await axios.post(
+                'http://localhost:3000/api/schedule/training',
+                {
+                    ...pendingTraining,
+                    force: true
+                },
+                {
+                    headers: {
+                        Authorization: `Bearer ${localStorage.getItem('token')}`
+                    }
+                }
+            );
+            setTrainingData({ dayOfWeek: 'Понедельник', startTime: '17:00', endTime: '18:00' });
+            fetchSchedule(pendingTraining.groupId);
+            setShowConfirmModal(false);
+            setConflictTraining(null);
+            setPendingTraining(null);
+        } catch (error) {
+            console.error('Error adding training:', error);
+        }
+    };
+
+    const handleCancelAddTraining = () => {
+        setShowConfirmModal(false);
+        setConflictTraining(null);
+        setPendingTraining(null);
+        setTrainingData({ dayOfWeek: 'Понедельник', startTime: '17:00', endTime: '18:00' });
     };
 
     const handleDeleteTraining = async (trainingId) => {
@@ -178,7 +223,7 @@ const GroupManagement = () => {
         try {
             await axios.post(
                 'http://localhost:3000/api/schedule/group/add-user',
-                { userId, groupId: selectedGroup }, // Убедимся, что groupId передается
+                { userId, groupId: selectedGroup },
                 {
                     headers: {
                         Authorization: `Bearer ${localStorage.getItem('token')}`
@@ -187,8 +232,44 @@ const GroupManagement = () => {
             );
             handleOpenMembersModal(selectedGroup);
         } catch (error) {
+            if (error.response && error.response.status === 400) {
+                console.log('Conflict group data:', error.response.data.existingGroup);
+                setConflictGroup(error.response.data.existingGroup);
+                setPendingUser({ userId, groupId: selectedGroup });
+                setShowUserConfirmModal(true);
+            } else {
+                console.error('Error adding user to group:', error);
+            }
+        }
+    };
+
+    const handleConfirmAddUser = async () => {
+        try {
+            await axios.post(
+                'http://localhost:3000/api/schedule/group/add-user',
+                {
+                    ...pendingUser,
+                    force: true
+                },
+                {
+                    headers: {
+                        Authorization: `Bearer ${localStorage.getItem('token')}`
+                    }
+                }
+            );
+            handleOpenMembersModal(selectedGroup);
+            setShowUserConfirmModal(false);
+            setConflictGroup(null);
+            setPendingUser(null);
+        } catch (error) {
             console.error('Error adding user to group:', error);
         }
+    };
+
+    const handleCancelAddUser = () => {
+        setShowUserConfirmModal(false);
+        setConflictGroup(null);
+        setPendingUser(null);
     };
 
     const handleRemoveUserFromGroup = async (userId) => {
@@ -370,6 +451,41 @@ const GroupManagement = () => {
                         </tbody>
                     </Table>
                 </Modal.Body>
+            </Modal>
+            <Modal show={showConfirmModal} onHide={handleCancelAddTraining}>
+                <Modal.Header closeButton>
+                    <Modal.Title>Подтверждение добавления тренировки</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    <p>В это время уже стоит тренировка у группы "{conflictTraining?.Group?.name || 'Неизвестная группа'}":</p>
+                    <p>День недели: {conflictTraining?.dayOfWeek}</p>
+                    <p>Время: {conflictTraining?.startTime} - {conflictTraining?.endTime}</p>
+                </Modal.Body>
+                <Modal.Footer>
+                    <Button variant="secondary" onClick={handleCancelAddTraining}>
+                        Отменить
+                    </Button>
+                    <Button variant="primary" onClick={handleConfirmAddTraining}>
+                        Все равно поставить
+                    </Button>
+                </Modal.Footer>
+            </Modal>
+            <Modal show={showUserConfirmModal} onHide={handleCancelAddUser}>
+                <Modal.Header closeButton>
+                    <Modal.Title>Подтверждение добавления спортсмена</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    <p>Спортсмен уже состоит в группе "{conflictGroup?.name || 'Неизвестная группа'}".</p>
+                    <p>Вы уверены, что хотите добавить его в эту группу?</p>
+                </Modal.Body>
+                <Modal.Footer>
+                    <Button variant="secondary" onClick={handleCancelAddUser}>
+                        Отменить
+                    </Button>
+                    <Button variant="primary" onClick={handleConfirmAddUser}>
+                        Все равно добавить
+                    </Button>
+                </Modal.Footer>
             </Modal>
         </Container>
     );

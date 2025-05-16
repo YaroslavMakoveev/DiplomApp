@@ -24,12 +24,11 @@ class ScheduleController {
     }
 
     async addTraining(req, res) {
-        const { groupId, dayOfWeek, startTime, endTime } = req.body;
+        const { groupId, dayOfWeek, startTime, endTime, force } = req.body;
         try {
-            // Проверяем, есть ли уже тренировка в это время
+            // Проверяем, есть ли уже тренировка в это время у других групп
             const existingTraining = await TrainingSchedule.findOne({
                 where: {
-                    groupId,
                     dayOfWeek,
                     [Op.or]: [
                         {
@@ -38,12 +37,26 @@ class ScheduleController {
                         {
                             endTime: { [Op.between]: [startTime, endTime] },
                         },
+                        {
+                            [Op.and]: [
+                                { startTime: { [Op.lte]: startTime } },
+                                { endTime: { [Op.gte]: endTime } }
+                            ]
+                        }
                     ],
                 },
+                include: [{
+                    model: Group,
+                    attributes: ['name']
+                }]
             });
     
-            if (existingTraining) {
-                return res.status(400).json({ message: 'Тренировка в это время уже существует' });
+            if (existingTraining && !force) {
+                console.log('Found conflicting training:', existingTraining.toJSON());
+                return res.status(400).json({ 
+                    message: 'В это время уже стоит тренировка у другой группы',
+                    existingTraining: existingTraining.toJSON()
+                });
             }
     
             const training = await TrainingSchedule.create({ groupId, dayOfWeek, startTime, endTime });
@@ -55,13 +68,29 @@ class ScheduleController {
     }
 
     async addUserToGroup(req, res) {
-        const { userId, groupId } = req.body;
+        const { userId, groupId, force } = req.body;
         try {
             // Проверяем, не состоит ли уже спортсмен в группе
-            const existingUserGroup = await UserGroup.findOne({ where: { userId, groupId } });
-            if (existingUserGroup) {
-                return res.status(400).json({ message: 'Спортсмен уже состоит в этой группе' });
+            const existingUserGroup = await UserGroup.findOne({ 
+                where: { userId },
+                include: [{
+                    model: Group,
+                    attributes: ['name']
+                }]
+            });
+
+            if (existingUserGroup && !force) {
+                return res.status(400).json({ 
+                    message: 'Спортсмен уже состоит в другой группе',
+                    existingGroup: existingUserGroup.Group
+                });
             }
+
+            // Если спортсмен уже состоит в группе и force=true, удаляем его из старой группы
+            if (existingUserGroup) {
+                await existingUserGroup.destroy();
+            }
+
             const userGroup = await UserGroup.create({ userId, groupId });
             return res.status(201).json(userGroup);
         } catch (e) {
